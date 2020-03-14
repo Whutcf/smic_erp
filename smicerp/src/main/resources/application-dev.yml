@@ -1,0 +1,38 @@
+server:
+  port: 8090
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/smic_erp?useUnicode=true&characterEncoding=utf8&useCursorFetch=true&defaultFetchSize=500&allowMultiQueries=true&rewriteBatchedStatements=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: "0316"
+
+
+
+
+mybatis-plus:
+  #实体扫描，多个package用逗号或分号分隔
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+  type-aliases-package: com.jshlearn.smicerp.pojo
+  global-config:
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID",ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID"
+      id-type: auto
+      table-prefix: smic_
+      #默认数据库使用下滑线命名
+      table-underline: true
+    #控制台是否print mybatis plus的LOGO
+    banner: true
+  configuration:
+    jdbc-type-for-null: null
+    map-underscore-to-camel-case: true
+    # 打印SQL到控制台
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+# Logger Level 可以定义到
+logging:
+  level:
+    com.jshlearn.smicerp: debug
+
