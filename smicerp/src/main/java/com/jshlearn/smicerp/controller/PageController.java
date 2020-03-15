@@ -38,6 +38,12 @@ public class PageController {
         return "noPermission";
     }
 
+    @RequestMapping("/reLogin")
+    public String toReLogin(){
+        log.info("======== 跳转SESSION过期页面 ========");
+        return "reLogin";
+    }
+
     @RequestMapping("/home")
     public String toHome(){
         log.info("======== 进入主页 ========");

@@ -180,6 +180,9 @@ public class BusinessConstants {
      */
     public static final String DEFAULT_MANAGER = "admin";
 
+    public static final String DEMONSTRATE_ACCOUNT = "smic";
+    public static final String SYS_OPERATION_PREFIX = "pages";
+
     /**
      * 用户操作行为定义
      */

@@ -211,6 +211,9 @@ public class UserController {
                 if (user.getLoginName().equalsIgnoreCase(BusinessConstants.DEFAULT_MANAGER)){
                     // 管理员不能修改密码
                     flag = 3;
+                }else if (user.getLoginName().equalsIgnoreCase(BusinessConstants.DEMONSTRATE_ACCOUNT)){
+                    // 演示帐号无法修改密码
+                    flag = 5;
                 }else {
                     // 原始密码密码必须和旧密码一直，才能更新
                     if (oldPassword.equalsIgnoreCase(user.getPassword())) {

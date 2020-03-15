@@ -1,5 +1,7 @@
 package com.jshlearn.smicerp.filter;
 
+import com.jshlearn.smicerp.constants.BusinessConstants;
+import com.jshlearn.smicerp.pojo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -19,11 +21,17 @@ import javax.servlet.http.HttpServletResponse;
 public class ErpInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Object user = request.getSession().getAttribute("user");
+        User user = (User) request.getSession().getAttribute("user");
         log.warn(">>>>>>>> 被拦截的页面: {}",request.getRequestURL());
         if (StringUtils.isEmpty(user)) {
-            response.sendRedirect("/noPermission");
+            response.sendRedirect("/reLogin");
             return false;
+        }else if (user.getLoginName().equalsIgnoreCase(BusinessConstants.DEMONSTRATE_ACCOUNT)){
+            // 演示帐号无法系统操作
+            if (request.getRequestURI().contains(BusinessConstants.SYS_OPERATION_PREFIX)){
+                response.sendRedirect("/noPermission");
+                return false;
+            }
         }
         return true;
     }
