@@ -1,7 +1,7 @@
 if (self.frameElement && self.frameElement.tagName == "IFRAME") {
     top.location.reload();
     /*!
-     * Copyright (c) 2013-Now 华夏erp All rights reserved.
+     * Copyright (c) 2013-Now SMIC_ERP All rights reserved.
      *
      * @author jishenghua
      * @version 2019-09-14
@@ -435,12 +435,12 @@ $(function () {
 
     //消息弹窗
     var loginName = sessionStorage.getItem("loginName");
-    if(loginName == "jsh") {
-        toastr.info('您当前正在使用演示账号，<br/>如需正式使用请注册 <a href="/register.html"><b>点击注册</b></a>');
+    if(loginName == "smic") {
+        toastr.info('您当前正在使用演示账号，<br/>如需正式使用请注册 <a href="/register"><b>点击注册</b></a>');
     }
 
     //广告循环
-    if(loginName == "jsh") {
+    if(loginName == "smic") {
         //根据时间戳决定展示aliyun还是tencent
         function autoChangeTip() {
             var timestamp=new Date().getTime();

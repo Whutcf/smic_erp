@@ -4,7 +4,10 @@ import com.jshlearn.smicerp.filter.ErpInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.Resource;
 
 /**
  * @Description
@@ -13,12 +16,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Date 2020/3/8 22:09
  **/
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebConfig extends WebMvcConfigurationSupport {
+
+    @Resource
+    private ErpInterceptor erpInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 默认拦截所有请求,不拦截静态资源
-        // TODO 目前无法修改无限轮询的bug
-//        registry.addInterceptor(new ErpInterceptor()).addPathPatterns("/**").
-//                excludePathPatterns("/css/**","/js/**","/images/**","/user/getUserSession","/userBusiness/getBasicData*","/functions/findMenu","/home.html","/error","/login.html");
+        registry.addInterceptor(erpInterceptor).addPathPatterns("/**")
+                .excludePathPatterns("/css/**","/js/**","/images/**","/login","/register","/user/*","/noPermission","/error");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/resources/")
+                .addResourceLocations("classpath:/resources/").addResourceLocations("classpath:/static/")
+                .addResourceLocations("classpath:/public/");
+        super.addResourceHandlers(registry);
     }
 }

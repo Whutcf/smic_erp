@@ -1,4 +1,4 @@
-//判断是否存在session，如果不存在就跳到登录界面
+//判断是否存在session，如果不存在就跳到重新登录界面
 $.ajax({
     type: "get",
     url: "/user/getUserSession",
@@ -12,10 +12,8 @@ $.ajax({
                 if (user.userName) {
                     $(".main-header .user-menu .hidden-xs,.main-sidebar .info p").text(user.userName);
                 } else {
-                    top.location.href = '/login';
+                    $(".main-header .user-menu .hidden-xs,.main-sidebar .info p").text("无姓名！");
                 }
-            } else {
-                top.location.href = '/login';
             }
         }
     }

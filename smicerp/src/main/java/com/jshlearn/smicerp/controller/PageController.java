@@ -17,7 +17,7 @@ public class PageController {
 
     @RequestMapping("/login")
     public String toLogin(){
-        log.debug("=====================用户跳转到登录页面======================");
+        log.debug("======== 跳转到登录页面 ========");
         return "login";
     }
     @RequestMapping("/register")
@@ -30,6 +30,12 @@ public class PageController {
     public String toIndex(){
         log.info("======== 跳转到主页 ========");
         return "index";
+    }
+
+    @RequestMapping("/noPermission")
+    public String toNoPermission(){
+        log.info("======== 跳转到没权限页面 ========");
+        return "noPermission";
     }
 
     @RequestMapping("/home")

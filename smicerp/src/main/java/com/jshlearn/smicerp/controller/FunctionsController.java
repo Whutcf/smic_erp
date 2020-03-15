@@ -76,7 +76,9 @@ public class FunctionsController {
                     parentItem.put("children", jsonFirstChildrenArray);
                 } else {
                     // 没有子菜单，父菜单直接跳转
-                    parentItem.put("url",parentFunctions.getUrl());
+                    if (null != parentFunctions.getUrl()){
+                        parentItem.put("url",parentFunctions.getUrl());
+                    }
                 }
                 jsonParentArray.add(parentItem);
             }
