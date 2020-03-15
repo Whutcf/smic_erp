@@ -57,7 +57,6 @@ public class UserController {
         //系统操作日志相关内容
         Log logInfo = ErpCustomUtils.initialLog(request);
         logInfo.setOperation(BusinessConstants.USER_OPERATION_LOGIN);
-        logInfo.setContentDetails(BusinessConstants.USER_OPERATION_MANAGE + userName + BusinessConstants.USER_OPERATION_LOGIN);
 
         //用户登录处理
         Object userInfo = session.getAttribute("user");
@@ -146,7 +145,8 @@ public class UserController {
                         }
                     }
                 }
-                logInfo.setRemark(userName + " 登录系统成功");
+                logInfo.setContentDetails(userDetailInfo.getUserName() + BusinessConstants.USER_OPERATION_LOGIN);
+                logInfo.setRemark(userDetailInfo.getUserName() + " 登录系统成功");
                 logService.insertLog(logInfo);
                 break;
         }
@@ -171,7 +171,7 @@ public class UserController {
         Log logInfo = ErpCustomUtils.initialLog(request);
         User user = (User) request.getSession().getAttribute("user");
         logInfo.setOperation(BusinessConstants.USER_OPERATION_LOGOUT);
-        logInfo.setContentDetails(BusinessConstants.USER_OPERATION_LOGOUT + user.getUserName() +"("+ user.getLoginName() +") "+BusinessConstants.USER_OPERATION_LOGOUT);
+        logInfo.setContentDetails(user.getUserName() +"("+ user.getLoginName() +") "+BusinessConstants.USER_OPERATION_LOGOUT);
 
         request.getSession().removeAttribute("user");
         request.getSession().removeAttribute("tenantId");

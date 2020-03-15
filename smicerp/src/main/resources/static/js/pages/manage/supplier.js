@@ -55,13 +55,14 @@
             //loadFilter: pagerFilter,
             pageSize: initPageSize,
             pageList: initPageNum,
-            columns:[[
+            columns:[
+                [
                 { field: 'id',width:35,align:"center",checkbox:true},
                 { title: '操作',field: 'op',align:"center",width:60,formatter:function(value,rec)
                     {
                         var str = '';
-                        var rowInfo = rec.id + 'AaBb' + rec.supplier +'AaBb' + rec.contacts + 'AaBb'+ rec.phonenum + 'AaBb'+ rec.email + 'AaBb'+ rec.beginneedget + 'AaBb'+ rec.beginneedpay + 'AaBb' + rec.isystem + 'AaBb' + rec.description+ 'AaBb' + rec.type
-                            + 'AaBb' + rec.fax + 'AaBb' + rec.telephone + 'AaBb' + rec.address + 'AaBb' + rec.taxnum + 'AaBb' + rec.bankname + 'AaBb' + rec.accountnumber + 'AaBb' + rec.taxrate;
+                        var rowInfo = rec.id + 'AaBb' + rec.supplier +'AaBb' + rec.contacts + 'AaBb'+ rec.phoneNum + 'AaBb'+ rec.email + 'AaBb'+ rec.beginNeedGet + 'AaBb'+ rec.beginNeedPay + 'AaBb' + rec.isystem + 'AaBb' + rec.description+ 'AaBb' + rec.type
+                            + 'AaBb' + rec.fax + 'AaBb' + rec.telephone + 'AaBb' + rec.address + 'AaBb' + rec.taxNum + 'AaBb' + rec.bankName + 'AaBb' + rec.accountNumber + 'AaBb' + rec.taxRate;
                         str += '<img title="编辑" src="/js/easyui-1.3.5/themes/icons/pencil.png" style="cursor: pointer;" onclick="editSupplier(\'' + rowInfo + '\');"/>&nbsp;&nbsp;&nbsp;';
                         str += '<img title="删除" src="/js/easyui-1.3.5/themes/icons/edit_remove.png" style="cursor: pointer;" onclick="deleteSupplier(\'' + rowInfo + '\');"/>';
                         return str;
@@ -71,18 +72,19 @@
                 { title: '联系人', field: 'contacts',width:50,align:"center"},
                 { title: '手机号码', field: 'telephone',width:100,align:"center"},
                 { title: '电子邮箱',field: 'email',width:80,align:"center"},
-                { title: '联系电话', field: 'phonenum',width:100,align:"center"},
+                { title: '联系电话', field: 'phoneNum',width:100,align:"center"},
                 { title: '传真', field: 'fax',width:100,align:"center"},
-                { title: '预付款',field: 'advancein',width:70,align:"center"},
-                { title: '期初应收',field: 'beginneedget',width:70,align:"center"},
-                { title: '期初应付',field: 'beginneedpay',width:70,align:"center"},
-                { title: '期末应收',field: 'allneedget',width:70,align:"center"},
-                { title: '期末应付',field: 'allneedpay',width:70,align:"center"},
-                { title: '税率(%)', field: 'taxrate',width:50,align:"center"},
+                { title: '预付款',field: 'advanceIn',width:70,align:"center"},
+                { title: '期初应收',field: 'beginNeedGet',width:70,align:"center"},
+                { title: '期初应付',field: 'beginNeedPay',width:70,align:"center"},
+                { title: '期末应收',field: 'allNeedGet',width:70,align:"center"},
+                { title: '期末应付',field: 'allNeedPay',width:70,align:"center"},
+                { title: '税率(%)', field: 'taxRate',width:50,align:"center"},
                 { title: '状态',field: 'enabled',width:70,align:"center",formatter:function(value){
                     return value? "启用":"禁用";
                 }}
-            ]],
+            ]
+            ],
             toolbar:[
                 {
                     id:'addSupplier',
@@ -402,11 +404,11 @@
     //导出数据
     function setOutputFun(){
         var supplier = $.trim($("#searchSupplier").val());
-        var phonenum = $.trim($("#searchPhonenum").val());
+        var phoneNum = $.trim($("#searchphoneNum").val());
         var telephone = $.trim($("#searchTelephone").val());
         var description = $.trim($("#searchDesc").val());
         window.location.href = "/supplier/exportExcel?browserType=" + getOs()
-            + "&supplier=" + supplier + "&type=" + listType + "&phonenum=" + phonenum + "&telephone=" + telephone + "&description=" + description;
+            + "&supplier=" + supplier + "&type=" + listType + "&phoneNum=" + phoneNum + "&telephone=" + telephone + "&description=" + description;
     }
 
     //增加单位
@@ -470,14 +472,14 @@
                 return;
             }
             var reg = /^([0-9])+$/;
-            var phonenum = $.trim($("#phonenum").val());
-            if(phonenum.length>0 && !reg.test(phonenum)) {
+            var phoneNum = $.trim($("#phoneNum").val());
+            if(phoneNum.length>0 && !reg.test(phoneNum)) {
                 $.messager.alert('提示','电话号码只能是数字','info');
-                $("#phonenum").val("").focus();
+                $("#phoneNum").val("").focus();
                 return;
             }
-            var beginNeedGet = $.trim($("#BeginNeedGet").val());
-            var beginNeedPay = $.trim($("#BeginNeedPay").val());
+            var beginNeedGet = $.trim($("#beginNeedGet").val());
+            var beginNeedPay = $.trim($("#beginNeedPay").val());
             if(beginNeedGet && beginNeedPay) {
                 $.messager.alert('提示','期初应收和期初应付不能同时输入','info');
                 return;
@@ -512,14 +514,14 @@
             //兼容 IE,firefox 兼容
             var obj = e.srcElement ? e.srcElement : e.target;
             //绑定键盘事件为 id是指定的输入框才可以触发键盘事件 13键盘事件
-            if(k == "13"&&(obj.id=="supplier" || obj.id=="contacts"|| obj.id=="phonenum"
+            if(k == "13"&&(obj.id=="supplier" || obj.id=="contacts"|| obj.id=="phoneNum"
                 || obj.id=="email" || obj.id=="description" ))
             {
                 $("#saveSupplier").click();
             }
 
             //搜索按钮添加快捷键
-            if(k == "13"&&(obj.id=="searchSupplier" || obj.id=="searchContacts"|| obj.id=="searchPhonenum"
+            if(k == "13"&&(obj.id=="searchSupplier" || obj.id=="searchContacts"|| obj.id=="searchphoneNum"
                 || obj.id=="searchEmail" || obj.id=="searchDesc" ))
             {
                 $("#searchBtn").click();
@@ -548,7 +550,7 @@
             click:function(){
                 $("#searchSupplier").val("");
                 $("#searchType").val("");
-                $("#searchPhonenum").val("");
+                $("#searchphoneNum").val("");
                 $("#searchTelephone").val("");
                 $("#searchDesc").val("");
 
@@ -568,12 +570,12 @@
         var row = {
             supplier : supplierInfo[1],
             contacts : supplierInfo[2].replace("undefined",""),
-            phonenum : supplierInfo[3].replace("undefined",""),
+            phoneNum : supplierInfo[3].replace("undefined",""),
             email : supplierInfo[4].replace("undefined",""),
-            BeginNeedGet : beginNeedGet == "0"? "":beginNeedGet,
-            BeginNeedPay : beginNeedPay == "0"? "":beginNeedPay,
-            AllNeedGet: "",
-            AllNeedPay: "",
+            beginNeedGet : beginNeedGet == "0"? "":beginNeedGet,
+            beginNeedPay : beginNeedPay == "0"? "":beginNeedPay,
+            allNeedGet: "",
+            allNeedPay: "",
             description : supplierInfo[8].replace("undefined",""),
             type : supplierInfo[9],
             fax : supplierInfo[10].replace("undefined",""),
@@ -629,15 +631,15 @@
                             if (res && res.code === 200 && res.data && res.data.rows && res.data.rows.getAllMoney !== "") {
                                 var moneyB = res.data.rows.getAllMoney.toFixed(2)-0;
                                 var money = moneyA+moneyB;
-                                var moneyBeginNeedGet = $("#BeginNeedGet").val()-0; //期初应收
-                                var moneyBeginNeedPay = $("#BeginNeedPay").val()-0; //期初应付
+                                var moneyBeginNeedGet = $("#beginNeedGet").val()-0; //期初应收
+                                var moneyBeginNeedPay = $("#beginNeedPay").val()-0; //期初应付
                                 if(listType === "客户"){
                                     money = (money + moneyBeginNeedGet - moneyBeginNeedPay).toFixed(2);
-                                    $("#AllNeedGet").val(money);  //累计应收
+                                    $("#allNeedGet").val(money);  //累计应收
                                 }
                                 else if(listType === "供应商"){
                                     money = (money + moneyBeginNeedPay - moneyBeginNeedGet).toFixed(2);
-                                    $("#AllNeedPay").val(money); //累计应付
+                                    $("#allNeedPay").val(money); //累计应付
                                 }
                             }
                         },
@@ -696,7 +698,7 @@
 
     function showSupplierDetails(pageNo,pageSize) {
         var supplier = $.trim($("#searchSupplier").val());
-        var phonenum = $.trim($("#searchPhonenum").val());
+        var phoneNum = $.trim($("#searchphoneNum").val());
         var telephone = $.trim($("#searchTelephone").val());
         var description = $.trim($("#searchDesc").val());
         $.ajax({
@@ -707,7 +709,7 @@
                 search: JSON.stringify({
                     supplier: supplier,
                     type: listType,
-                    phonenum: phonenum,
+                    phoneNum: phoneNum,
                     telephone: telephone,
                     description: description
                 }),
@@ -716,8 +718,8 @@
             }),
             success: function (res) {
                 if(res && res.code === 200){
-                    if(res.data && res.data.page) {
-                        $("#tableData").datagrid('loadData', res.data.page);
+                    if(res.data) {
+                        $("#tableData").datagrid('loadData', res.data);
                     }
                 }
             },

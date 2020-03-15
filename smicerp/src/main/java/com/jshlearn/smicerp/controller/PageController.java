@@ -18,48 +18,49 @@ public class PageController {
     // 用户管理相关的页面跳转
 
     @RequestMapping("/login")
-    public String toLogin(){
+    public String toLogin() {
         log.debug("======== 跳转到登录页面 ========");
         return "login";
     }
+
     @RequestMapping("/register")
-    public String toRegister(){
+    public String toRegister() {
         log.debug("======== 跳转到注册页面 ========");
         return "register";
     }
 
     @RequestMapping("/index")
-    public String toIndex(){
+    public String toIndex() {
         log.info("======== 跳转到主页 ========");
         return "index";
     }
 
     @RequestMapping("/noPermission")
-    public String toNoPermission(){
+    public String toNoPermission() {
         log.info("======== 跳转到没权限页面 ========");
         return "noPermission";
     }
 
     @RequestMapping("/reLogin")
-    public String toReLogin(){
+    public String toReLogin() {
         log.info("======== 跳转SESSION过期页面 ========");
         return "reLogin";
     }
 
     @RequestMapping("/home")
-    public String toHome(){
+    public String toHome() {
         log.info("======== 进入主页 ========");
         return "home";
     }
 
     @GetMapping("/user/password")
-    public String toPassword(){
+    public String toPassword() {
         log.info("======== 跳转到修改密码页面 ========");
         return "pages/user/password";
     }
 
     @GetMapping("/user/userHelp")
-    public String toUserHelp(){
+    public String toUserHelp() {
         log.info("======== 跳转到新手引导页面 ========");
         return "pages/user/userHelp";
     }
@@ -68,9 +69,17 @@ public class PageController {
     // 商品相关的页面跳转
 
     @GetMapping("/pages/materials/material")
-    public String toMaterial(){
+    public String toMaterial() {
         log.info("======== 跳转到商品管理页面 ========");
         return "pages/materials/material";
     }
 
+    // 供应商相关的页面跳转
+    
+    @GetMapping("/pages/manage/vendor")
+    public String toVendor() {
+        log.info("======== 跳转到供应商页面 ========");
+        return "pages/manage/vendor";
+    }
 }
+

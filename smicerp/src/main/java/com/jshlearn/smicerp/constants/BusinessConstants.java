@@ -9,10 +9,6 @@ package com.jshlearn.smicerp.constants;
 public class BusinessConstants {
 
     /**
-     * 默认的日期格式
-     */
-    public static final String DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    /**
      * 默认的分页起始页页码
      */
     public static final Integer DEFAULT_PAGINATION_PAGE_NUMBER = 1;
@@ -158,8 +154,9 @@ public class BusinessConstants {
     public static final String LOG_OPERATION_TYPE_BATCH_ADD = "批量新增";
     public static final String LOG_OPERATION_TYPE_EDIT = "修改,id:";
     public static final String LOG_OPERATION_TYPE_DELETE = "删除,id:";
-    public static final String LOG_OPERATION_TYPE_LOGIN = "登录,id:";
     public static final String LOG_OPERATION_TYPE_IMPORT = "导入";
+    public static final String LOG_OPERATION_TYPE_EXPORT = "导出";
+    public static final String LOG_OPERATION_TYPE_SELECT = "查询";
 
     /**
      * 数据数量单位
@@ -193,5 +190,15 @@ public class BusinessConstants {
     public static final String USER_OPERATION_LOGOUT = "退出系统";
     public static final String USER_OPERATION_CHANGE_PASSWORD = "修改密码";
     public static final String USER_OPERATION_RESET_PASSWORD = "重置密码";
+
+    /**
+     * 菜单操作定义
+     */
+
+    public static final String SUPPLIER_MANAGEMENT = "供应商管理";
+
+
+
+
 
 }
