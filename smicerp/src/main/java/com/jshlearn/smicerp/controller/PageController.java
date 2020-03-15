@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class PageController {
 
+    // 用户管理相关的页面跳转
+
     @RequestMapping("/login")
     public String toLogin(){
         log.debug("======== 跳转到登录页面 ========");
@@ -60,6 +62,15 @@ public class PageController {
     public String toUserHelp(){
         log.info("======== 跳转到新手引导页面 ========");
         return "pages/user/userHelp";
+    }
+
+
+    // 商品相关的页面跳转
+
+    @GetMapping("/pages/materials/material")
+    public String toMaterial(){
+        log.info("======== 跳转到商品管理页面 ========");
+        return "pages/materials/material";
     }
 
 }

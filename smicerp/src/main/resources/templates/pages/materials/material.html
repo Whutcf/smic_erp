@@ -298,15 +298,10 @@
             $.ajax({
                 type: "get",
                 url: "/materialProperty/list",
-                dataType: "json",
-                data: ({
-                    currentPage: 1,
-                    pageSize: 100
-                }),
                 success: function (res) {
                     if(res && res.code === 200){
-                        if(res.data && res.data.page) {
-                            mPropertyList = res.data.page.rows; //属性列表
+                        if(res.data && res.data.rows) {
+                            mPropertyList = res.data.rows; //属性列表
                         }
                     }
                 },
@@ -432,16 +427,11 @@
             $.ajax({
                 type: "get",
                 url: "/materialProperty/list",
-                dataType: "json",
                 async: false,
-                data: ({
-                    currentPage: 1,
-                    pageSize: 100
-                }),
                 success: function (res) {
                     if(res && res.code === 200){
-                        if(res.data && res.data.page) {
-                            var thisRows = res.data.page.rows; //属性列表
+                        if(res.data && res.data.rows) {
+                            var thisRows = res.data.rows; //属性列表
                             for (var i = 0; i < thisRows.length; i++) {
                                 if (thisRows[i].enabled) {
                                     mPropertyListShort += thisRows[i].nativename + ",";
@@ -513,68 +503,70 @@
                 //loadFilter: pagerFilter,
                 pageSize: initPageSize,
                 pageList: initPageNum,
-                columns: [[
-                    {field: 'id', width: 35, align: "center", checkbox: true},
-                    {
-                        title: '操作', field: 'op', align: "center", width: 60, formatter: function (value, rec, index) {
-                            var str = '';
-                            str += '<img title="编辑" src="/js/easyui-1.3.5/themes/icons/pencil.png" style="cursor: pointer;" onclick="editMaterial(\'' + index + '\');"/>&nbsp;&nbsp;&nbsp;';
-                            str += '<img title="删除" src="/js/easyui-1.3.5/themes/icons/edit_remove.png" style="cursor: pointer;" onclick="deleteMaterial(' + rec.id + ');"/>';
-                            return str;
-                        }
-                    },
-                    {title: '品名', field: 'name', width: 100},
-                    {title: '型号', field: 'model', width: 80},
-                    {title: '类别', field: 'categoryName', width: 80},
-                    {title: '扩展信息', field: 'materialOther', width: 150},
-                    {title: '单位', field: 'unit', width: 100,
-                        formatter: function (value, rec) {
-                            if(value) {
-                                return value;
-                            } else {
-                                return rec.unitName;
+                columns: [
+                            [
+                            {field: 'id', width: 35, align: "center", checkbox: true},
+                            {
+                                title: '操作', field: 'op', align: "center", width: 60, formatter: function (value, rec, index) {
+                                    var str = '';
+                                    str += '<img title="编辑" src="/js/easyui-1.3.5/themes/icons/pencil.png" style="cursor: pointer;" onclick="editMaterial(\'' + index + '\');"/>&nbsp;&nbsp;&nbsp;';
+                                    str += '<img title="删除" src="/js/easyui-1.3.5/themes/icons/edit_remove.png" style="cursor: pointer;" onclick="deleteMaterial(' + rec.id + ');"/>';
+                                    return str;
+                                }
+                            },
+                            {title: '品名', field: 'name', width: 100},
+                            {title: '型号', field: 'model', width: 80},
+                            {title: '类别', field: 'categoryName', width: 80},
+                            {title: '扩展信息', field: 'materialOther', width: 150},
+                            {title: '单位', field: 'unit', width: 100,
+                                formatter: function (value, rec) {
+                                    if(value) {
+                                        return value;
+                                    } else {
+                                        return rec.unitName;
+                                    }
+                                }
+                            },
+                            {title: '安全存量', field: 'safetystock', width: 70},
+                            {
+                                title: '库存', field: 'stock', width: 70, formatter: function (value, rec) {
+                                    var str = '';
+                                    str += '<span title="查看出入库明细" class="n-link" onclick="findStockList(' + rec.id + ');">' + rec.stock + '</span>';
+                                    return str;
+                                }
+                            },
+                            {title: '零售价', field: 'retailprice', width: 60,
+                                formatter: function (value, rec) {
+                                    return parsePrice(value, rec, "retailprice");
+                                }
+                            },
+                            {title: '最低售价', field: 'lowprice', width: 70,
+                                formatter: function (value, rec) {
+                                    return parsePrice(value, rec, "lowprice");
+                                }
+                            },
+                            {title: '预计采购价', field: 'presetpriceone', width: 70,
+                                formatter: function (value, rec) {
+                                    return parsePrice(value, rec, "presetpriceone");
+                                }
+                            },
+                            {title: '销售价', field: 'presetpricetwo', width: 70,
+                                formatter: function (value, rec) {
+                                    return parsePrice(value, rec, "presetpricetwo");
+                                }
+                            },
+                            {
+                                title: '状态', field: 'enabled', width: 50, align: "center", formatter: function (value) {
+                                    return value ? "启用" : "禁用";
+                                }
+                            },
+                            {
+                                title: '序列号', field: 'enableserialnumber', width: 70, align: "center", formatter: function (value) {
+                                    return value=='1' ? "有" : "无";
+                                }
                             }
-                        }
-                    },
-                    {title: '安全存量', field: 'safetystock', width: 70},
-                    {
-                        title: '库存', field: 'stock', width: 70, formatter: function (value, rec) {
-                            var str = '';
-                            str += '<span title="查看出入库明细" class="n-link" onclick="findStockList(' + rec.id + ');">' + rec.stock + '</span>';
-                            return str;
-                        }
-                    },
-                    {title: '零售价', field: 'retailprice', width: 60,
-                        formatter: function (value, rec) {
-                            return parsePrice(value, rec, "retailprice");
-                        }
-                    },
-                    {title: '最低售价', field: 'lowprice', width: 70,
-                        formatter: function (value, rec) {
-                            return parsePrice(value, rec, "lowprice");
-                        }
-                    },
-                    {title: '预计采购价', field: 'presetpriceone', width: 70,
-                        formatter: function (value, rec) {
-                            return parsePrice(value, rec, "presetpriceone");
-                        }
-                    },
-                    {title: '销售价', field: 'presetpricetwo', width: 70,
-                        formatter: function (value, rec) {
-                            return parsePrice(value, rec, "presetpricetwo");
-                        }
-                    },
-                    {
-                        title: '状态', field: 'enabled', width: 50, align: "center", formatter: function (value) {
-                            return value ? "启用" : "禁用";
-                        }
-                    },
-                    {
-                        title: '序列号', field: 'enableserialnumber', width: 70, align: "center", formatter: function (value) {
-                            return value=='1' ? "有" : "无";
-                        }
-                    }
-                ]],
+                        ]
+                ],
                 toolbar: [
                     {
                         id: 'addMaterial',
@@ -658,7 +650,8 @@
                 pagination: true,
                 pageSize: initPageSize,
                 pageList: initPageNum,
-                columns: [[
+                columns: [
+                    [
                     {
                         title: '单据编号', field: 'Number', width: 150,
                         formatter: function (value, row) {
@@ -668,7 +661,8 @@
                     {title: '类型', field: 'Type', width: 100},
                     {title: '数量', field: 'BasicNumber', width: 80},
                     {title: '日期', field: 'OperTime', width: 180}
-                ]],
+                ]
+                ],
                 onLoadError: function () {
                     $.messager.alert('页面加载提示', '页面加载异常，请稍后再试！', 'error');
                     return;
