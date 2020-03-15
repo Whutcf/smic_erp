@@ -2,6 +2,7 @@ package com.jshlearn.smicerp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.jshlearn.smicerp.constants.BusinessConstants;
 import com.jshlearn.smicerp.constants.ExceptionConstants;
 import com.jshlearn.smicerp.mapper.UserMapper;
 import com.jshlearn.smicerp.pojo.User;
@@ -13,7 +14,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartException;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -108,5 +108,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer updateUser(User user) {
         return userMapper.updateById(user);
+    }
+
+    @Override
+    public int getUserCount() {
+        LambdaQueryWrapper<User> query = Wrappers.lambdaQuery();
+        query.eq(User::getStatus, BusinessConstants.USER_STATUS_NORMAL);
+        return userMapper.selectCount(query);
     }
 }

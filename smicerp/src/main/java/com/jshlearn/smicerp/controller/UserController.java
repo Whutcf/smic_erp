@@ -240,5 +240,12 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getUserCount")
+    public ResultBean<JSONObject> getUserCount(){
+        JSONObject jsonObject = new JSONObject();
+        Integer total = userService.getUserCount();
+        jsonObject.put("total",total);
+        return ResultBeanUtil.success(jsonObject);
+    }
 
 }

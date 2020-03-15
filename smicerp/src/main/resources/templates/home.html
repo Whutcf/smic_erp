@@ -155,21 +155,12 @@
 
     $(function () {
         $.ajax({
-            type: "get",
-            url: "/user/list",
-            dataType: "json",
-            data: ({
-                search: JSON.stringify({
-                    userName: "",
-                    loginName: ""
-                }),
-                currentPage: 1,
-                pageSize: 10
-            }),
+            type: "GET",
+            url: "/user/getUserCount",
             success: function (res) {
                 if(res && res.code === 200) {
-                    if(res.data && res.data.page) {
-                        $("#thisUserSum").text(res.data.page.total);
+                    if(res.data && res.data.total) {
+                        $("#thisUserSum").text(res.data.total);
                     }
                 }
             },

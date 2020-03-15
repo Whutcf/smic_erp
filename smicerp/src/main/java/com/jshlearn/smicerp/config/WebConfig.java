@@ -25,7 +25,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     public void addInterceptors(InterceptorRegistry registry) {
         // 默认拦截所有请求,不拦截静态资源
         registry.addInterceptor(erpInterceptor).addPathPatterns("/**")
-                .excludePathPatterns("/css/**","/js/**","/images/**","/login","/register","/user/*","/noPermission","/error");
+                .excludePathPatterns("/css/**","/js/**","/images/**","/template/**","/reLogin","/login","/register","/user/login","/noPermission","/error");
     }
 
     @Override

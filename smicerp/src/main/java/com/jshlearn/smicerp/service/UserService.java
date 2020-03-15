@@ -50,4 +50,12 @@ public interface UserService {
      * @date 2020/3/14 20:13
      */
     Integer updateUser(User user);
+
+    /**
+     * 获取用户总数
+     * @return int
+     * @author 蔡明涛
+     * @date 2020/3/15 15:57
+     */
+    int getUserCount();
 }
