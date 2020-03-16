@@ -240,7 +240,8 @@ public class ExceptionConstants {
     public static final String SUPPLIER_DELETE_FAILED_MSG = "删除供应商信息失败";
     public static final int SUPPLIER_EDIT_FAILED_CODE = 7000002;
     public static final String SUPPLIER_EDIT_FAILED_MSG = "修改供应商信息失败";
-
+    public static final int SUPPLIER_SELECT_FAILED_CODE = 7000003;
+    public static final String SUPPLIER_SELECT_FAILED_MSG = "查询供应商信息失败";
 
     /**
      * 商品类别信息 type = 75

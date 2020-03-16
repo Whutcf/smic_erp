@@ -66,12 +66,38 @@ public class SupplierController {
 
         JSONObject jsonObject = JSON.parseObject(info);
         Supplier supplier = JSON.toJavaObject(jsonObject,Supplier.class);
+
+        User user = (User) request.getSession().getAttribute("user");
+        Log logInfo = ErpCustomUtils.initialLog(request);
+        logInfo.setOperation(BusinessConstants.SUPPLIER_MANAGEMENT);
+        logInfo.setContentDetails(user.getUserName()+BusinessConstants.LOG_OPERATION_TYPE_ADD+supplier.getSupplier());
+
         int i = supplierService.save(supplier);
         if (i > 0) {
+            logInfo.setRemark(BusinessConstants.LOG_OPERATION_TYPE_ADD+ExceptionConstants.SERVICE_SUCCESS_MSG);
+            logService.insertLog(logInfo);
             return ResultBeanUtil.success();
         }else {
+            logInfo.setRemark(ExceptionConstants.SUPPLIER_ADD_FAILED_MSG);
+            logService.insertLog(logInfo);
             return ResultBeanUtil.error(ExceptionConstants.SUPPLIER_ADD_FAILED_CODE,ExceptionConstants.SUPPLIER_ADD_FAILED_MSG);
         }
-
     }
+
+    @GetMapping("/checkIsNameExist")
+    public ResultBean<JSONObject> checkIsNameExist(@RequestParam(value = "name")String supplierName,HttpServletRequest request){
+
+        // TODO 记录操作日志表
+        JSONObject jsonObject = new JSONObject();
+
+        Boolean flag = supplierService.checkIsNameExist(supplierName);
+        jsonObject.put("status",flag);
+        if (flag){
+            return ResultBeanUtil.success(jsonObject);
+        }else {
+            return ResultBeanUtil.success();
+        }
+    }
+
+
 }

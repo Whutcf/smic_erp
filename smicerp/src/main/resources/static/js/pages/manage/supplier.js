@@ -658,7 +658,7 @@
     }
 
 
-    //检查单位名称是否存在 ++ 重名无法提示问题需要跟进
+    //检查单位名称是否存在
     function checkSupplierName() {
         var supplierName = $.trim($("#supplier").val());
         //表示是否存在 true == 存在 false = 不存在
@@ -671,12 +671,11 @@
                 dataType: "json",
                 async :  false,
                 data: ({
-                    id : supplierID,
                     name : supplierName
                 }),
                 success: function (res) {
                     if(res && res.code === 200) {
-                        if(res.data && res.data.status) {
+                        if(res.data) {
                             flag = res.data.status;
                             if (flag) {
                                 $.messager.alert('提示', '单位名称已经存在', 'info');

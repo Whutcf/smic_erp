@@ -30,4 +30,13 @@ public interface SupplierService {
      * @date 2020/3/15 22:32
      */
     int save(Supplier supplier);
+
+    /**
+     * 根据名称判断是否存在
+     * @param supplierName 供应商名称
+     * @return java.lang.Boolean
+     * @author 蔡明涛
+     * @date 2020/3/16 20:30
+     */
+    Boolean checkIsNameExist(String supplierName);
 }

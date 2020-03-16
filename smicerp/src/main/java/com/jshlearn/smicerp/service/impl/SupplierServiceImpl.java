@@ -1,6 +1,7 @@
 package com.jshlearn.smicerp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -44,5 +45,12 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public int save(Supplier supplier) {
         return supplierMapper.insert(supplier);
+    }
+
+    @Override
+    public Boolean checkIsNameExist(String supplierName) {
+        LambdaQueryWrapper<Supplier> queryWrapper = Wrappers.lambdaQuery();
+        Integer count = supplierMapper.selectCount(queryWrapper.eq(Supplier::getSupplier, supplierName));
+        return count > 1;
     }
 }
