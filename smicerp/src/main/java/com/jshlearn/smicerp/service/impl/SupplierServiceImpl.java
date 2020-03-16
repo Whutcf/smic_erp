@@ -10,6 +10,7 @@ import com.jshlearn.smicerp.mapper.SupplierMapper;
 import com.jshlearn.smicerp.pojo.Supplier;
 import com.jshlearn.smicerp.service.SupplierService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -52,5 +53,11 @@ public class SupplierServiceImpl implements SupplierService {
         LambdaQueryWrapper<Supplier> queryWrapper = Wrappers.lambdaQuery();
         Integer count = supplierMapper.selectCount(queryWrapper.eq(Supplier::getSupplier, supplierName));
         return count > 1;
+    }
+
+    @Override
+    public int batchSetEnable(Boolean enabled, String supplierIds) {
+        // TODO 先将supplierIds 转为list 在利用遍历处理，可以减少SQL注入的风险
+        return  supplierMapper.batchSetEnable(enabled,supplierIds);
     }
 }

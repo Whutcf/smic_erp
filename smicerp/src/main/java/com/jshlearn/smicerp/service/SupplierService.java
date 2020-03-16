@@ -5,7 +5,7 @@ import com.jshlearn.smicerp.pojo.Supplier;
 import java.util.List;
 
 /**
- * @Description TODO
+ * @Description
  * @ClassName SupplierService
  * @Author 蔡明涛
  * @Date 2020/3/15 20:12
@@ -39,4 +39,14 @@ public interface SupplierService {
      * @date 2020/3/16 20:30
      */
     Boolean checkIsNameExist(String supplierName);
+
+    /**
+     * 批量启用供应商
+     * @param enabled 启用标记 true 启动，false 禁用
+     * @param supplierIds id拼接的字符串 ex. 63,58
+     * @return int
+     * @author 蔡明涛
+     * @date 2020/3/16 21:10
+     */
+    int batchSetEnable(Boolean enabled, String supplierIds);
 }

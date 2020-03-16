@@ -99,5 +99,18 @@ public class SupplierController {
         }
     }
 
+    @PostMapping("/batchSetEnable")
+    public ResultBean<Supplier> batchSetEnable(@RequestParam(value = "enabled") Boolean enabled,
+                                          @RequestParam(value = "supplierIDs") String supplierIds,
+                                          HttpServletRequest request){
+
+        int i = supplierService.batchSetEnable(enabled,supplierIds);
+        if (i>0){
+            return ResultBeanUtil.success();
+        }else {
+            return ResultBeanUtil.error(ExceptionConstants.USER_EDIT_FAILED_CODE,ExceptionConstants.USER_EDIT_FAILED_MSG);
+        }
+    }
+
 
 }
