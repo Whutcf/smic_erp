@@ -116,7 +116,7 @@ public class SupplierController {
         }
     }
 
-    //TODO 目前删除接口暂时还不能做，需要等单据接口和财务接口完成后操作
+    //TODO 目前编辑和删除接口暂时还不能做，需要等单据接口和财务接口完成后在重写
 
     @GetMapping("/exportExcel")
     public void exportExcel(@RequestParam("supplier")String supplier,

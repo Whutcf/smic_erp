@@ -81,5 +81,21 @@ public class PageController {
         log.info("======== 跳转到供应商页面 ========");
         return "pages/manage/vendor";
     }
+
+    // 客户相关的页面跳转
+
+    @GetMapping("/pages/manage/customer")
+    public String toCustomer() {
+        log.info("======== 跳转到供应商页面 ========");
+        return "pages/manage/customer";
+    }
+
+    // 会员相关的页面跳转
+
+    @GetMapping("/pages/manage/member")
+    public String toMember() {
+        log.info("======== 跳转到供应商页面 ========");
+        return "pages/manage/member";
+    }
 }
 
