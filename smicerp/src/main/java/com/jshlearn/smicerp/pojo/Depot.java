@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -13,7 +14,8 @@ import java.math.BigDecimal;
  * @Date 2020/3/7 10:53
  **/
 @Data
-public class Depot {
+public class Depot implements Serializable {
+    private static final long serialVersionUID = -2227529701064388578L;
     @TableId(value = "id",type = IdType.AUTO)
     private Long id;
     private String name;
@@ -41,7 +43,7 @@ public class Depot {
     /**
      * 负责人
      */
-    private Long principle;
+    private Long principal;
     /**
      * 租户id
      */

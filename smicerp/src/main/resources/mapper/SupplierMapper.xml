@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jshlearn.smicerp.mapper.SupplierMapper">
+
+
+    <update id="batchSetEnable">
+        update smic_erp.smic_supplier
+        set enabled = #{enabled}
+        <!-- 这里不使用 # 的原因是 mybaits会自动将ids解析为多个字符，而#只能代表一个占位符，但是这样会有注入风险
+        可以先将ids转为list 再遍历 ，这边图省事 先不这么做了-->
+        where id in (${supplierIds})
+    </update>
+    <select id="getExcelDataByParams" resultType="com.jshlearn.smicerp.pojo.Supplier">
+        select supplier, contacts, phone_num, email, telephone, fax, advance_in, begin_need_get, begin_need_pay, all_need_get, all_need_pay, type
+        from smic_erp.smic_supplier
+        where type = #{type}
+        <if test="supplier != null and supplier !='' ">
+            and supplier like '%#{supplier}%'
+        </if>
+        <if test="description != null and description !='' ">
+            and description like '%#{description}%'
+        </if>
+        <if test="phoneNum != null and phoneNum !='' ">
+            and phone_num like '%#{phoneNum}%'
+        </if>
+        <if test="telephone != null and telephone !='' ">
+            and telephone like '%#{telephone}%'
+        </if>
+</select>
+
+</mapper>

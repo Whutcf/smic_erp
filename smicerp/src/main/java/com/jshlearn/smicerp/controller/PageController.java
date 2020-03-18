@@ -86,7 +86,7 @@ public class PageController {
 
     @GetMapping("/pages/manage/customer")
     public String toCustomer() {
-        log.info("======== 跳转到供应商页面 ========");
+        log.info("======== 跳转到客户页面 ========");
         return "pages/manage/customer";
     }
 
@@ -94,8 +94,16 @@ public class PageController {
 
     @GetMapping("/pages/manage/member")
     public String toMember() {
-        log.info("======== 跳转到供应商页面 ========");
+        log.info("======== 跳转到会员页面 ========");
         return "pages/manage/member";
+    }
+
+    // 仓库相关的页面跳转
+
+    @GetMapping("/pages/manage/depot")
+    public String toDepot() {
+        log.info("======== 跳转到仓库页面 ========");
+        return "pages/manage/depot";
     }
 }
 
