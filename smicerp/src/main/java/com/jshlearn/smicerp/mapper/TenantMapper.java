@@ -5,7 +5,7 @@ import com.jshlearn.smicerp.pojo.Tenant;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * @Description TODO
+ * @Description
  * @ClassName TenantMapper
  * @Author 蔡明涛
  * @Date 2020/3/12 21:47

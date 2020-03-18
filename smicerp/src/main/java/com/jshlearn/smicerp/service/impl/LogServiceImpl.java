@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 
 /**
- * @Description TODO
+ * @Description
  * @ClassName LogServiceImpl
  * @Author 蔡明涛
  * @Date 2020/3/12 22:02

@@ -1,9 +1,8 @@
 package com.jshlearn.smicerp.controller;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.gson.JsonObject;
 import com.jshlearn.smicerp.constants.BusinessConstants;
 import com.jshlearn.smicerp.constants.ExceptionConstants;
 import com.jshlearn.smicerp.constants.PageConstants;
@@ -13,6 +12,7 @@ import com.jshlearn.smicerp.pojo.User;
 import com.jshlearn.smicerp.service.LogService;
 import com.jshlearn.smicerp.service.SupplierService;
 import com.jshlearn.smicerp.utils.ErpCustomUtils;
+import com.jshlearn.smicerp.utils.ExcelUtils;
 import com.jshlearn.smicerp.utils.ResultBean;
 import com.jshlearn.smicerp.utils.ResultBeanUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +20,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description TODO
+ * @Description
  * @ClassName SupplierController
  * @Author 蔡明涛
  * @Date 2020/3/15 20:14
@@ -104,6 +107,7 @@ public class SupplierController {
                                           @RequestParam(value = "supplierIDs") String supplierIds,
                                           HttpServletRequest request){
 
+        // TODO 记录操作日志
         int i = supplierService.batchSetEnable(enabled,supplierIds);
         if (i>0){
             return ResultBeanUtil.success();
@@ -112,5 +116,39 @@ public class SupplierController {
         }
     }
 
+    //TODO 目前删除接口暂时还不能做，需要等单据接口和财务接口完成后操作
+
+    @GetMapping("/exportExcel")
+    public void exportExcel(@RequestParam("supplier")String supplier,
+                            @RequestParam("type")String type,
+                            @RequestParam("phoneNum")String phoneNum,
+                            @RequestParam("telephone")String telephone,
+                            @RequestParam("description")String description,
+                            HttpServletRequest request, HttpServletResponse response){
+        List<Supplier> dataList = supplierService.getExcelData(supplier,type,phoneNum,telephone,description);
+        String[] titles = {"名称","联系人","手机号码","电子邮箱","联系电话","传真","预付款","期初应收","期初应付","期末应收","期末应付","税率%","状态"};
+        String excelName = "供应商信息";
+        List<String[]> exportData = new ArrayList<>();
+        if (dataList.size()>0){
+            for (Supplier s: dataList) {
+                String[] data = new String[13];
+                data[0] = s.getSupplier();
+                data[1] = s.getContacts();
+                data[2] = s.getPhoneNum();
+                data[3] = s.getEmail();
+                data[4] = s.getTelephone();
+                data[5] = s.getFax();
+                data[6] = s.getAdvanceIn() == null ? "" : s.getAdvanceIn().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+                data[7] = s.getBeginNeedGet() == null ? "" : s.getBeginNeedGet().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+                data[8] = s.getBeginNeedPay() == null ? "" : s.getBeginNeedPay().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+                data[9] = s.getAllNeedGet() == null ? "" : s.getAllNeedGet().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+                data[10] = s.getAllNeedPay() == null ? "" : s.getAllNeedPay().setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+                data[11] = s.getTaxRate() == null ? "" : s.getTaxRate().toString();
+                data[12] = s.isEnabled() ? "启用" : "禁用";
+                exportData.add(data);
+            }
+        }
+        ExcelUtils.export(excelName,titles,exportData,response);
+    }
 
 }

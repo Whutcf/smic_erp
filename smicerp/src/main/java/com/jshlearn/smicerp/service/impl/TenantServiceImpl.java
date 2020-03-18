@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
- * @Description TODO
+ * @Description
  * @ClassName TenantServiceImpl
  * @Author 蔡明涛
  * @Date 2020/3/12 21:46

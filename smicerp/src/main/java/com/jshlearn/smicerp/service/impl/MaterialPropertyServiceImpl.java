@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 
 /**
- * @Description TODO
+ * @Description
  * @ClassName MaterialPropertyServiceImpl
  * @Author 蔡明涛
  * @Date 2020/3/15 17:23

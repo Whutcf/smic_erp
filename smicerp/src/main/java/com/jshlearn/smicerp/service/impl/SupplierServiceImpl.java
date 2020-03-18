@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @Description TODO
+ * @Description
  * @ClassName SupplierServiceImpl
  * @Author 蔡明涛
  * @Date 2020/3/15 20:13
@@ -59,5 +59,11 @@ public class SupplierServiceImpl implements SupplierService {
     public int batchSetEnable(Boolean enabled, String supplierIds) {
         // TODO 先将supplierIds 转为list 在利用遍历处理，可以减少SQL注入的风险
         return  supplierMapper.batchSetEnable(enabled,supplierIds);
+    }
+
+    @Override
+    public List<Supplier> getExcelData(String supplier, String type, String phoneNum, String telephone, String description) {
+        // 练习Mybatis的基本写法
+        return supplierMapper.getExcelDataByParams(supplier,type,phoneNum,telephone,description);
     }
 }
