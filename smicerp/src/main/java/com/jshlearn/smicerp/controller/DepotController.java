@@ -2,6 +2,7 @@ package com.jshlearn.smicerp.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.jshlearn.smicerp.constants.ExceptionConstants;
 import com.jshlearn.smicerp.constants.PageConstants;
 import com.jshlearn.smicerp.pojo.Depot;
 import com.jshlearn.smicerp.service.DepotService;
@@ -36,16 +37,29 @@ public class DepotController {
     private LogService logService;
 
 
-    @GetMapping("getDepotList")
+    @GetMapping("/getDepotList")
     public ResultBean<List<Depot>> showDepotDetails(@RequestParam(PageConstants.SEARCH) String search,
                                                     @RequestParam(PageConstants.CURRENT_PAGE) Integer currentPage,
                                                     @RequestParam(PageConstants.PAGE_SIZE) Integer pageSize,
                                                     HttpServletRequest request){
+        // TODO 添加操作日志记录
         JSONObject jsonObject = JSON.parseObject(search);
         Depot depot = JSON.toJavaObject(jsonObject, Depot.class);
         List<Depot> depots = depotService.showDepotDetails(depot,currentPage,pageSize);
         return ResultBeanUtil.success(depots);
+    }
 
+    @GetMapping("/updateDepotIsDefault")
+    public ResultBean<Depot> setDepotIsDefault(@RequestParam("depotId") String depotId,
+                                               HttpServletRequest request){
+
+
+       int i = depotService.setDepotIsDefault(Long.parseLong(depotId));
+        if (i > 0){
+            return ResultBeanUtil.success();
+        } else {
+            return ResultBeanUtil.error(ExceptionConstants.DEPOT_EDIT_FAILED_CODE,ExceptionConstants.DEPOT_EDIT_FAILED_MSG);
+        }
     }
 
 }

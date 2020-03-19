@@ -21,4 +21,13 @@ public interface DepotService {
      * @date 2020/3/18 22:50
      */
     List<Depot> showDepotDetails(Depot depot, Integer currentPage, Integer pageSize);
+
+    /**
+     * 设置仓库为默认仓库
+     * @param id 仓库id
+     * @return int
+     * @author 蔡明涛
+     * @date 2020/3/19 19:48
+     */
+    int setDepotIsDefault(Long id);
 }

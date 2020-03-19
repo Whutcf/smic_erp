@@ -2,6 +2,8 @@ package com.jshlearn.smicerp.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -55,5 +57,6 @@ public class Depot implements Serializable {
     /**
      * 是否默认
      */
+    @JsonProperty("isDefault")
     private boolean isDefault;
 }

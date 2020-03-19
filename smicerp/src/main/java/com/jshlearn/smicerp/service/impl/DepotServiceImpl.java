@@ -1,6 +1,7 @@
 package com.jshlearn.smicerp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -37,5 +38,13 @@ public class DepotServiceImpl implements DepotService  {
         Page<Depot> page = new Page<>(currentPage,pageSize);
         IPage<Depot> iPage = depotMapper.selectPage(page,queryWrapper);
         return iPage.getRecords();
+    }
+
+    @Override
+    public int setDepotIsDefault(Long id) {
+
+        depotMapper.setNonDefaultDepotById(id);
+
+        return depotMapper.setDefaultDepotById(id);
     }
 }
