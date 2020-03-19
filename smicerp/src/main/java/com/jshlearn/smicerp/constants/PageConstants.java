@@ -16,6 +16,7 @@ public class PageConstants {
     public final static String FILTER = "filter";
     public final static String SPLIT = ",";
     public final static String SEARCH = "search";
+    public final static String NAME = "name";
     public final static String INFO = "info";
     public final static String DEVICE_ID = "deviceId";
     public final static String OFFSET = "offset";

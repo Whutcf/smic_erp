@@ -52,8 +52,7 @@ public class DepotController {
     @GetMapping("/updateDepotIsDefault")
     public ResultBean<Depot> setDepotIsDefault(@RequestParam("depotId") String depotId,
                                                HttpServletRequest request){
-
-
+        // TODO 添加操作日志记录
        int i = depotService.setDepotIsDefault(Long.parseLong(depotId));
         if (i > 0){
             return ResultBeanUtil.success();
@@ -61,5 +60,7 @@ public class DepotController {
             return ResultBeanUtil.error(ExceptionConstants.DEPOT_EDIT_FAILED_CODE,ExceptionConstants.DEPOT_EDIT_FAILED_MSG);
         }
     }
+
+    // TODO 删除和增加选项由于系统的相关模块还未完善，暂不处理
 
 }

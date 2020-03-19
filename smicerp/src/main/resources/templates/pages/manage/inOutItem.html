@@ -130,7 +130,8 @@
             //loadFilter: pagerFilter,
             pageSize: initPageSize,
             pageList: initPageNum,
-            columns: [[
+            columns: [
+                [
                 {field: 'id', width: 35, align: "center", checkbox: true},
                 {title: '名称', field: 'name', width: 200},
                 {title: '类型', field: 'type', width: 100, align: "center"},
@@ -144,7 +145,8 @@
                         return str;
                     }
                 }
-            ]],
+            ]
+            ],
             toolbar: [
                 {
                     id: 'addInOutItem',
@@ -413,7 +415,7 @@
         url = '/inOutItem/update?id=' + inOutItemInfo[0];
     }
 
-    //检查收支项目 名称是否存在 ++ 重名无法提示问题需要跟进
+    //检查收支项目
     function checkInOutItemName() {
         var inOutItemName = $.trim($("#name").val());
         //表示是否存在 true == 存在 false = 不存在
@@ -426,15 +428,17 @@
                 dataType: "json",
                 async: false,
                 data: ({
-                    id: inOutItemID,
                     name: inOutItemName
                 }),
                 success: function (res) {
                     if(res && res.code === 200) {
-                        if(res.data && res.data.status) {
-                            flag = res.data.status;
-                            if (flag) {
+                        if(res.data) {
+                            flag = true;
+                            if (res.data.item.deleteFlag === '0') {
                                 $.messager.alert('提示', '收支项目名称已经存在', 'info');
+                                return;
+                            } else {
+                                $.messager.alert('提示', '收支项目名称存在,但是已被删除，请联系管理员11945', 'info');
                                 return;
                             }
                         }
@@ -484,8 +488,8 @@
             }),
             success: function (res) {
                 if(res && res.code === 200){
-                    if(res.data && res.data.page) {
-                        $("#tableData").datagrid('loadData', res.data.page);
+                    if(res.data) {
+                        $("#tableData").datagrid('loadData', res.data);
                     }
                 }
             },

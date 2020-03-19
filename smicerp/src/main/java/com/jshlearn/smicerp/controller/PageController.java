@@ -105,5 +105,13 @@ public class PageController {
         log.info("======== 跳转到仓库页面 ========");
         return "pages/manage/depot";
     }
+
+    // 收支项目页面跳转
+
+    @GetMapping("/pages/manage/inOutItem")
+    public String toInOutItem(){
+        log.info("======== 跳转收支项目页 ========");
+        return "pages/manage/inOutItem";
+    }
 }
 
