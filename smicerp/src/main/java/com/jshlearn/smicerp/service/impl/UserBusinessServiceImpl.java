@@ -7,6 +7,7 @@ import com.jshlearn.smicerp.pojo.UserBusiness;
 import com.jshlearn.smicerp.service.UserBusinessService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -19,12 +20,14 @@ import java.util.List;
  **/
 @Slf4j
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class UserBusinessServiceImpl implements UserBusinessService {
 
     @Resource
     private UserBusinessMapper userBusinessMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserBusiness> getBasicData(String keyId, String type) {
 
         List<UserBusiness> list = null;

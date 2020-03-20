@@ -5,6 +5,7 @@ import com.jshlearn.smicerp.pojo.MaterialProperty;
 import com.jshlearn.smicerp.service.MaterialPropertyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class MaterialPropertyServiceImpl implements MaterialPropertyService {
     private MaterialPropertyMapper mapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ArrayList<MaterialProperty> getAll() {
         return (ArrayList<MaterialProperty>) mapper.selectList(null);
     }

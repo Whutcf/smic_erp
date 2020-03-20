@@ -8,6 +8,7 @@ import com.jshlearn.smicerp.pojo.Tenant;
 import com.jshlearn.smicerp.service.TenantService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -19,6 +20,7 @@ import javax.annotation.Resource;
  **/
 @Slf4j
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class TenantServiceImpl implements TenantService {
     @Resource
     private TenantMapper tenantMapper;

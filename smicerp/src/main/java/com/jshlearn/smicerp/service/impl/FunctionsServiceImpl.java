@@ -9,6 +9,7 @@ import com.jshlearn.smicerp.pojo.Functions;
 import com.jshlearn.smicerp.service.FunctionsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -25,6 +26,7 @@ public class FunctionsServiceImpl implements FunctionsService {
     @Resource
     private FunctionsMapper functionsMapper;
 
+    @Transactional(readOnly = true)
     @Override
     public List<Functions> getRoleFunctions(String pNumber) {
         LambdaQueryWrapper<Functions> queryWrapper = Wrappers.lambdaQuery();

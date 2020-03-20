@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jshlearn.smicerp.constants.ExceptionConstants;
 import com.jshlearn.smicerp.mapper.SupplierMapper;
 import com.jshlearn.smicerp.pojo.Supplier;
 import com.jshlearn.smicerp.service.SupplierService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -24,12 +26,14 @@ import java.util.List;
  **/
 @Slf4j
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class SupplierServiceImpl implements SupplierService {
 
     @Resource
     private SupplierMapper supplierMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Supplier> selectPage(Supplier supplier, Integer currentPage, Integer pageSize) {
         LambdaQueryWrapper<Supplier> lambdaQuery = Wrappers.lambdaQuery();
         // 判断供应商的名字是否为null，不为null则作为查询的条件，以此为例判断其他查询条件
@@ -49,6 +53,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean checkIsNameExist(String supplierName) {
         LambdaQueryWrapper<Supplier> queryWrapper = Wrappers.lambdaQuery();
         Integer count = supplierMapper.selectCount(queryWrapper.eq(Supplier::getSupplier, supplierName));
@@ -62,6 +67,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Supplier> getExcelData(String supplier, String type, String phoneNum, String telephone, String description) {
         // 练习Mybatis的基本写法
         return supplierMapper.getExcelDataByParams(supplier,type,phoneNum,telephone,description);

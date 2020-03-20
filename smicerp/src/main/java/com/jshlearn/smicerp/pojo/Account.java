@@ -2,6 +2,7 @@ package com.jshlearn.smicerp.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -36,6 +37,7 @@ public class Account {
     /**
      * 是否默认
      */
+    @JsonProperty("isDefault")
     private int isDefault;
     /**
      * 租户id

@@ -6,11 +6,13 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jshlearn.smicerp.constants.ExceptionConstants;
 import com.jshlearn.smicerp.mapper.InOutItemMapper;
 import com.jshlearn.smicerp.pojo.InOutItem;
 import com.jshlearn.smicerp.service.InOutItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -48,6 +50,7 @@ public class InOutItemServiceImpl implements InOutItemService {
      * @date 2020/3/19 22:52
      */
     @Override
+    @Transactional(readOnly = true)
     public InOutItem getItemByName(String name) {
         return new LambdaQueryChainWrapper<InOutItem>(mapper).eq(InOutItem::getName,name).one();
     }
@@ -61,6 +64,7 @@ public class InOutItemServiceImpl implements InOutItemService {
      * @date 2020/3/19 23:07
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int add(InOutItem inOutItem) {
         // 设置默认参数
         inOutItem.setDeleteFlag("0");
