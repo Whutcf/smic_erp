@@ -66,8 +66,6 @@ public class InOutItemServiceImpl implements InOutItemService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int add(InOutItem inOutItem) {
-        // 设置默认参数
-        inOutItem.setDeleteFlag("0");
         return mapper.insert(inOutItem);
     }
 }

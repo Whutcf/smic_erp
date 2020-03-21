@@ -41,6 +41,7 @@ public class SupplierServiceImpl implements SupplierService {
         lambdaQuery.eq(StringUtils.isNotBlank(supplier.getPhoneNum()),Supplier::getPhoneNum,supplier.getPhoneNum());
         lambdaQuery.eq(StringUtils.isNotBlank(supplier.getTelephone()),Supplier::getTelephone,supplier.getTelephone());
         lambdaQuery.like(StringUtils.isNotBlank(supplier.getDescription()),Supplier::getDescription,supplier.getDescription());
+        lambdaQuery.eq(Supplier::getDeleteFlag,"0");
         Page<Supplier> page = new Page<>(currentPage,pageSize);
         IPage<Supplier> iPage = supplierMapper.selectPage(page,lambdaQuery);
         return EasyUiPageUtil.pageResult(iPage.getTotal(),iPage.getRecords());
