@@ -113,5 +113,13 @@ public class PageController {
         log.info("======== 跳转收支项目页 ========");
         return "pages/manage/inOutItem";
     }
+
+    // 结算账户页面跳转
+
+    @GetMapping("/pages/manage/account")
+    public String toAccount(){
+        log.info("======== 跳转结算账户页 ========");
+        return "pages/manage/account";
+    }
 }
 

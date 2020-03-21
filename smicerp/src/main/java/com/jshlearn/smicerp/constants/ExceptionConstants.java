@@ -229,6 +229,8 @@ public class ExceptionConstants {
     public static final String ACCOUNT_DELETE_FAILED_MSG = "删除账户信息失败";
     public static final int ACCOUNT_EDIT_FAILED_CODE = 6500002;
     public static final String ACCOUNT_EDIT_FAILED_MSG = "修改账户信息失败";
+    public static final int ACCOUNT_SELECT_FAILED_CODE = 6500003;
+    public static final String ACCOUNT_SELECT_FAILED_MSG = "查询账户信息失败";
 
 
     /**
