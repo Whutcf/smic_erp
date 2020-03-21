@@ -2,7 +2,7 @@ package com.jshlearn.smicerp.service;
 
 import com.jshlearn.smicerp.pojo.InOutItem;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @Description
@@ -13,17 +13,19 @@ import java.util.List;
 public interface InOutItemService {
     /**
      * 分页查询收支项目
-     * @param inOutItem 收支项目类
+     *
+     * @param inOutItem   收支项目类
      * @param currentPage 当前页
-     * @param pageSize 页面记录数
-     * @return java.util.List<com.jshlearn.smicerp.pojo.InOutItem>
+     * @param pageSize    页面记录数
+     * @return Map<String, Object>
      * @author 蔡明涛
-     * @date 2020/3/19 22:36
+     * @date 2020/3/21 10:25
      */
-    List<InOutItem> selectPage(InOutItem inOutItem, Integer currentPage, Integer pageSize);
+    Map<String, Object> selectPage(InOutItem inOutItem, Integer currentPage, Integer pageSize);
 
     /**
      * 根据名字查找对象
+     *
      * @param name 收支项目名称
      * @return com.jshlearn.smicerp.pojo.InOutItem
      * @author 蔡明涛
@@ -33,6 +35,7 @@ public interface InOutItemService {
 
     /**
      * 新增收支项目
+     *
      * @param inOutItem 收支项目对象
      * @return int
      * @author 蔡明涛

@@ -704,8 +704,8 @@
                 }),
                 success: function (res) {
                     if(res && res.code === 200){
-                        if(res.data && res.data.page) {
-                            $("#materialTableData").datagrid('loadData', res.data.page);
+                        if(res.data) {
+                            $("#materialTableData").datagrid('loadData', res.data);
                         }
                     }
                 },

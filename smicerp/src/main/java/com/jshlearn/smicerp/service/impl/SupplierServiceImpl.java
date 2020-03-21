@@ -1,22 +1,21 @@
 package com.jshlearn.smicerp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jshlearn.smicerp.constants.ExceptionConstants;
 import com.jshlearn.smicerp.mapper.SupplierMapper;
 import com.jshlearn.smicerp.pojo.Supplier;
 import com.jshlearn.smicerp.service.SupplierService;
+import com.jshlearn.smicerp.utils.EasyUiPageUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description
@@ -34,7 +33,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Supplier> selectPage(Supplier supplier, Integer currentPage, Integer pageSize) {
+    public Map<String,Object> selectPage(Supplier supplier, Integer currentPage, Integer pageSize) {
         LambdaQueryWrapper<Supplier> lambdaQuery = Wrappers.lambdaQuery();
         // 判断供应商的名字是否为null，不为null则作为查询的条件，以此为例判断其他查询条件
         lambdaQuery.like(StringUtils.isNotBlank(supplier.getSupplier()),Supplier::getSupplier,supplier.getSupplier());
@@ -44,7 +43,7 @@ public class SupplierServiceImpl implements SupplierService {
         lambdaQuery.like(StringUtils.isNotBlank(supplier.getDescription()),Supplier::getDescription,supplier.getDescription());
         Page<Supplier> page = new Page<>(currentPage,pageSize);
         IPage<Supplier> iPage = supplierMapper.selectPage(page,lambdaQuery);
-        return iPage.getRecords();
+        return EasyUiPageUtil.pageResult(iPage.getTotal(),iPage.getRecords());
     }
 
     @Override

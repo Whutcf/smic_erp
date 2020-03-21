@@ -1,12 +1,11 @@
 package com.jshlearn.smicerp.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.jshlearn.smicerp.constants.ExceptionConstants;
 import com.jshlearn.smicerp.constants.PageConstants;
 import com.jshlearn.smicerp.pojo.Depot;
 import com.jshlearn.smicerp.service.DepotService;
 import com.jshlearn.smicerp.service.LogService;
+import com.jshlearn.smicerp.utils.ErpCustomUtils;
 import com.jshlearn.smicerp.utils.ResultBean;
 import com.jshlearn.smicerp.utils.ResultBeanUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Map;
 
 /**
- * @Description TODO
+ * @Description
  * @ClassName DepotController
  * @Author 蔡明涛
  * @Date 2020/3/18 22:40
@@ -38,15 +37,14 @@ public class DepotController {
 
 
     @GetMapping("/getDepotList")
-    public ResultBean<List<Depot>> showDepotDetails(@RequestParam(PageConstants.SEARCH) String search,
+    public ResultBean<Map<String,Object>> showDepotDetails(@RequestParam(PageConstants.SEARCH) String search,
                                                     @RequestParam(PageConstants.CURRENT_PAGE) Integer currentPage,
                                                     @RequestParam(PageConstants.PAGE_SIZE) Integer pageSize,
                                                     HttpServletRequest request){
         // TODO 添加操作日志记录
-        JSONObject jsonObject = JSON.parseObject(search);
-        Depot depot = JSON.toJavaObject(jsonObject, Depot.class);
-        List<Depot> depots = depotService.showDepotDetails(depot,currentPage,pageSize);
-        return ResultBeanUtil.success(depots);
+        Depot depot = (Depot) ErpCustomUtils.getClassObject(search, Depot.class);
+        Map<String,Object> pageRecords = depotService.showDepotDetails(depot,currentPage,pageSize);
+        return ResultBeanUtil.success(pageRecords);
     }
 
     @GetMapping("/updateDepotIsDefault")

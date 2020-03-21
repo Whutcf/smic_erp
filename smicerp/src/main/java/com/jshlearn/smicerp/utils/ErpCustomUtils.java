@@ -1,5 +1,6 @@
 package com.jshlearn.smicerp.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.jshlearn.smicerp.constants.BusinessConstants;
 import com.jshlearn.smicerp.pojo.Log;
 import com.jshlearn.smicerp.pojo.User;
@@ -47,6 +48,13 @@ public class ErpCustomUtils {
         return true;
     }
 
+    /**
+     * 初始化操作日志对象
+     * @param request 页面请求
+     * @return com.jshlearn.smicerp.pojo.Log
+     * @author 蔡明涛
+     * @date 2020/3/21 9:50
+     */
     public static Log initialLog(HttpServletRequest request){
         Log logInfo = new Log();
         User user = (User) request.getSession().getAttribute("user");
@@ -57,5 +65,18 @@ public class ErpCustomUtils {
         logInfo.setCreateTime(new Date());
         logInfo.setStatus(BusinessConstants.USER_OPERATION_SUCCESS);
         return logInfo;
+    }
+
+
+    /**
+     * 将页面传入的json字符串转换为对象
+     * @param search json字符串
+     * @param obj 对象
+     * @return java.lang.Object
+     * @author 蔡明涛
+     * @date 2020/3/21 10:09
+     */
+    public static Object getClassObject (String search,Class<?> obj){
+        return JSON.toJavaObject(JSON.parseObject(search), obj);
     }
 }

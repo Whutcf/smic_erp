@@ -20,14 +20,14 @@ public class ResultBeanUtil {
     public static <V> ResultBean<V> success(){
         ResultBean<V> resultBean = new ResultBean<>();
         resultBean.setCode(ExceptionConstants.SERVICE_SUCCESS_CODE);
-        resultBean.setMessage("Success!");
+        resultBean.setMessage(ExceptionConstants.SERVICE_SUCCESS_MSG);
         return resultBean;
     }
 
     public static <V> ResultBean<V> success(V data){
         ResultBean<V> resultBean = new ResultBean<>();
         resultBean.setCode(ExceptionConstants.SERVICE_SUCCESS_CODE);
-        resultBean.setMessage("Success!");
+        resultBean.setMessage(ExceptionConstants.SERVICE_SUCCESS_MSG);
         resultBean.setData(data);
         return resultBean;
     }

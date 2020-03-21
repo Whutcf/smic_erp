@@ -6,16 +6,16 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.jshlearn.smicerp.constants.ExceptionConstants;
 import com.jshlearn.smicerp.mapper.InOutItemMapper;
 import com.jshlearn.smicerp.pojo.InOutItem;
 import com.jshlearn.smicerp.service.InOutItemService;
+import com.jshlearn.smicerp.utils.EasyUiPageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @Description TODO
@@ -30,7 +30,7 @@ public class InOutItemServiceImpl implements InOutItemService {
     private InOutItemMapper mapper;
 
     @Override
-    public List<InOutItem> selectPage(InOutItem inOutItem, Integer currentPage, Integer pageSize) {
+    public Map<String,Object> selectPage(InOutItem inOutItem, Integer currentPage, Integer pageSize) {
 
         LambdaQueryWrapper<InOutItem> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.like(StringUtils.isNotBlank(inOutItem.getName()),InOutItem::getName,inOutItem.getName());
@@ -39,7 +39,7 @@ public class InOutItemServiceImpl implements InOutItemService {
         queryWrapper.eq(InOutItem::getDeleteFlag,"0");
         Page<InOutItem> page = new Page<>(currentPage,pageSize);
         IPage<InOutItem> iPage = mapper.selectPage(page,queryWrapper);
-        return iPage.getRecords();
+        return EasyUiPageUtil.pageResult(iPage.getTotal(),iPage.getRecords());
     }
 
     /**

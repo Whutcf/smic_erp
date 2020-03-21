@@ -1,7 +1,5 @@
 package com.jshlearn.smicerp.controller;
 
-import com.alibaba.druid.support.json.JSONUtils;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jshlearn.smicerp.constants.BusinessConstants;
 import com.jshlearn.smicerp.constants.ExceptionConstants;
@@ -24,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description
@@ -43,94 +42,91 @@ public class SupplierController {
     private LogService logService;
 
     @GetMapping("/list")
-    public ResultBean<List<Supplier>> showSupplierDetails(@RequestParam(value = PageConstants.SEARCH, required = false) String search,
-                                          @RequestParam(value = PageConstants.CURRENT_PAGE, required = false) Integer currentPage,
-                                          @RequestParam(value = PageConstants.PAGE_SIZE, required = false) Integer pageSize,
-                                          HttpServletRequest request) {
-        // 将页面传入的Json字符串转换成Json对象
-        JSONObject jsonObject = JSON.parseObject(search);
-        // 将转化过来的值直接赋值成 Supplier 的对象
-        Supplier supplier = JSON.toJavaObject(jsonObject, Supplier.class);
-        // 获取的是供应商信息的集合
-        List<Supplier> pageRecords = supplierService.selectPage(supplier,currentPage,pageSize);
+    public ResultBean<Map<String, Object>> showSupplierDetails(@RequestParam(value = PageConstants.SEARCH, required = false) String search,
+                                                               @RequestParam(value = PageConstants.CURRENT_PAGE, required = false) Integer currentPage,
+                                                               @RequestParam(value = PageConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                               HttpServletRequest request) {
+        // 将搜索条件转换成对象
+        Supplier supplier = (Supplier) ErpCustomUtils.getClassObject(search, Supplier.class);
+        // 获取的是供应商信息的集合和当前总记录数
+        Map<String, Object> pageRecords = supplierService.selectPage(supplier, currentPage, pageSize);
         // 记录操作人的日志
         Log logInfo = ErpCustomUtils.initialLog(request);
         User user = (User) request.getSession().getAttribute("user");
         logInfo.setOperation(BusinessConstants.SUPPLIER_MANAGEMENT);
-        logInfo.setContentDetails(user.getUserName()+BusinessConstants.LOG_OPERATION_TYPE_SELECT+ ExceptionConstants.SERVICE_SUCCESS_MSG);
-        logInfo.setRemark(BusinessConstants.LOG_OPERATION_TYPE_SELECT+ ExceptionConstants.SERVICE_SUCCESS_MSG);
+        logInfo.setContentDetails(user.getUserName() + BusinessConstants.LOG_OPERATION_TYPE_SELECT + ExceptionConstants.SERVICE_SUCCESS_MSG);
+        logInfo.setRemark(BusinessConstants.LOG_OPERATION_TYPE_SELECT + ExceptionConstants.SERVICE_SUCCESS_MSG);
         logService.insertLog(logInfo);
 
         return ResultBeanUtil.success(pageRecords);
     }
 
     @PostMapping("/add")
-    public ResultBean<Supplier> addSupplier(@RequestParam(value = PageConstants.INFO)String info,HttpServletRequest request){
+    public ResultBean<Supplier> addSupplier(@RequestParam(value = PageConstants.INFO) String info, HttpServletRequest request) {
 
-        JSONObject jsonObject = JSON.parseObject(info);
-        Supplier supplier = JSON.toJavaObject(jsonObject,Supplier.class);
+        Supplier supplier = (Supplier) ErpCustomUtils.getClassObject(info, Supplier.class);
 
         User user = (User) request.getSession().getAttribute("user");
         Log logInfo = ErpCustomUtils.initialLog(request);
         logInfo.setOperation(BusinessConstants.SUPPLIER_MANAGEMENT);
-        logInfo.setContentDetails(user.getUserName()+BusinessConstants.LOG_OPERATION_TYPE_ADD+supplier.getSupplier());
+        logInfo.setContentDetails(user.getUserName() + BusinessConstants.LOG_OPERATION_TYPE_ADD + supplier.getSupplier());
 
         int i = supplierService.save(supplier);
         if (i > 0) {
-            logInfo.setRemark(BusinessConstants.LOG_OPERATION_TYPE_ADD+ExceptionConstants.SERVICE_SUCCESS_MSG);
+            logInfo.setRemark(BusinessConstants.LOG_OPERATION_TYPE_ADD + ExceptionConstants.SERVICE_SUCCESS_MSG);
             logService.insertLog(logInfo);
             return ResultBeanUtil.success();
-        }else {
+        } else {
             logInfo.setRemark(ExceptionConstants.SUPPLIER_ADD_FAILED_MSG);
             logService.insertLog(logInfo);
-            return ResultBeanUtil.error(ExceptionConstants.SUPPLIER_ADD_FAILED_CODE,ExceptionConstants.SUPPLIER_ADD_FAILED_MSG);
+            return ResultBeanUtil.error(ExceptionConstants.SUPPLIER_ADD_FAILED_CODE, ExceptionConstants.SUPPLIER_ADD_FAILED_MSG);
         }
     }
 
     @GetMapping("/checkIsNameExist")
-    public ResultBean<JSONObject> checkIsNameExist(@RequestParam(value = "name")String supplierName,HttpServletRequest request){
+    public ResultBean<JSONObject> checkIsNameExist(@RequestParam(value = "name") String supplierName, HttpServletRequest request) {
 
         // TODO 记录操作日志表
         JSONObject jsonObject = new JSONObject();
 
         Boolean flag = supplierService.checkIsNameExist(supplierName);
-        jsonObject.put("status",flag);
-        if (flag){
+        jsonObject.put("status", flag);
+        if (flag) {
             return ResultBeanUtil.success(jsonObject);
-        }else {
+        } else {
             return ResultBeanUtil.success();
         }
     }
 
     @PostMapping("/batchSetEnable")
     public ResultBean<Supplier> batchSetEnable(@RequestParam(value = "enabled") Boolean enabled,
-                                          @RequestParam(value = "supplierIDs") String supplierIds,
-                                          HttpServletRequest request){
+                                               @RequestParam(value = "supplierIDs") String supplierIds,
+                                               HttpServletRequest request) {
 
         // TODO 记录操作日志
-        int i = supplierService.batchSetEnable(enabled,supplierIds);
-        if (i>0){
+        int i = supplierService.batchSetEnable(enabled, supplierIds);
+        if (i > 0) {
             return ResultBeanUtil.success();
-        }else {
-            return ResultBeanUtil.error(ExceptionConstants.USER_EDIT_FAILED_CODE,ExceptionConstants.USER_EDIT_FAILED_MSG);
+        } else {
+            return ResultBeanUtil.error(ExceptionConstants.USER_EDIT_FAILED_CODE, ExceptionConstants.USER_EDIT_FAILED_MSG);
         }
     }
 
     //TODO 目前编辑和删除接口暂时还不能做，需要等单据接口和财务接口完成后在重写
 
     @GetMapping("/exportExcel")
-    public void exportExcel(@RequestParam("supplier")String supplier,
-                            @RequestParam("type")String type,
-                            @RequestParam("phoneNum")String phoneNum,
-                            @RequestParam("telephone")String telephone,
-                            @RequestParam("description")String description,
-                            HttpServletRequest request, HttpServletResponse response){
-        List<Supplier> dataList = supplierService.getExcelData(supplier,type,phoneNum,telephone,description);
-        String[] titles = {"名称","联系人","手机号码","电子邮箱","联系电话","传真","预付款","期初应收","期初应付","期末应收","期末应付","税率%","状态"};
+    public void exportExcel(@RequestParam("supplier") String supplier,
+                            @RequestParam("type") String type,
+                            @RequestParam("phoneNum") String phoneNum,
+                            @RequestParam("telephone") String telephone,
+                            @RequestParam("description") String description,
+                            HttpServletRequest request, HttpServletResponse response) {
+        List<Supplier> dataList = supplierService.getExcelData(supplier, type, phoneNum, telephone, description);
+        String[] titles = {"名称", "联系人", "手机号码", "电子邮箱", "联系电话", "传真", "预付款", "期初应收", "期初应付", "期末应收", "期末应付", "税率%", "状态"};
         String excelName = "供应商信息";
         List<String[]> exportData = new ArrayList<>();
-        if (dataList.size()>0){
-            for (Supplier s: dataList) {
+        if (dataList.size() > 0) {
+            for (Supplier s : dataList) {
                 String[] data = new String[13];
                 data[0] = s.getSupplier();
                 data[1] = s.getContacts();
@@ -148,7 +144,7 @@ public class SupplierController {
                 exportData.add(data);
             }
         }
-        ExcelUtils.export(excelName,titles,exportData,response);
+        ExcelUtils.export(excelName, titles, exportData, response);
     }
 
 }

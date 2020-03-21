@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public interface MaterialPropertyService {
     /**
      * 获取所有
-     * @param
+     *
      * @return java.util.ArrayList<com.jshlearn.smicerp.pojo.MaterialProperty>
      * @author 蔡明涛
      * @date 2020/3/15 17:28

@@ -7,6 +7,7 @@ import com.jshlearn.smicerp.constants.PageConstants;
 import com.jshlearn.smicerp.pojo.InOutItem;
 import com.jshlearn.smicerp.service.InOutItemService;
 import com.jshlearn.smicerp.service.LogService;
+import com.jshlearn.smicerp.utils.ErpCustomUtils;
 import com.jshlearn.smicerp.utils.ResultBean;
 import com.jshlearn.smicerp.utils.ResultBeanUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @Description TODO
@@ -34,14 +35,13 @@ public class InOutItemController {
     private LogService logService;
 
     @GetMapping("/list")
-    public ResultBean<List<InOutItem>> showInOutItemDetails(@RequestParam(PageConstants.SEARCH) String search,
+    public ResultBean<Map<String,Object>> showInOutItemDetails(@RequestParam(PageConstants.SEARCH) String search,
                                                            @RequestParam(PageConstants.CURRENT_PAGE) Integer currentPage,
                                                            @RequestParam(PageConstants.PAGE_SIZE) Integer pageSize,
                                                            HttpServletRequest request) {
-        JSONObject jsonObject = JSON.parseObject(search);
-        InOutItem inOutItem = JSON.toJavaObject(jsonObject, InOutItem.class);
-        List<InOutItem> inOutItems = inOutItemService.selectPage(inOutItem,currentPage,pageSize);
-        return ResultBeanUtil.success(inOutItems);
+        InOutItem inOutItem = (InOutItem) ErpCustomUtils.getClassObject(search, InOutItem.class);
+        Map<String,Object> pageRecords = inOutItemService.selectPage(inOutItem,currentPage,pageSize);
+        return ResultBeanUtil.success(pageRecords);
     }
 
     @GetMapping("/checkIsNameExist")
