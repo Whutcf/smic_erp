@@ -58,6 +58,13 @@ public class InOutItemController {
         return i>0 ?ResultBeanUtil.success():ResultBeanUtil.error(ExceptionConstants.SERVICE_SYSTEM_ERROR_CODE,ExceptionConstants.SERVICE_SYSTEM_ERROR_MSG);
     }
 
+    @PostMapping("/update")
+    public ResultBean<InOutItem> update(@RequestParam(PageConstants.INFO) String info, @RequestParam(PageConstants.ID) Long id, HttpServletRequest request){
+        InOutItem inOutItem = (InOutItem)ErpCustomUtils.getClassObject(info,InOutItem.class);
+        int i = inOutItemService.update(id,inOutItem);
+        return i>0 ? ResultBeanUtil.success(): ResultBeanUtil.error(ExceptionConstants.IN_OUT_ITEM_ADD_FAILED_CODE,ExceptionConstants.IN_OUT_ITEM_EDIT_FAILED_MSG);
+    }
+
     // TODO 删除模块需要等财务模块写好再重构
 
 }

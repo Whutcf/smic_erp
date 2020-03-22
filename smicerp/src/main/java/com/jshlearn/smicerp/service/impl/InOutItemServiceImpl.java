@@ -15,10 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Map;
 
 /**
- * @Description TODO
+ * @Description
  * @ClassName InOutItemServiceImpl
  * @Author 蔡明涛
  * @Date 2020/3/19 22:25
@@ -66,6 +67,23 @@ public class InOutItemServiceImpl implements InOutItemService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int add(InOutItem inOutItem) {
+        inOutItem.setCreateTime(new Date());
         return mapper.insert(inOutItem);
+    }
+
+    /**
+     * 更新
+     *
+     * @param id        Long id
+     * @param inOutItem 不包含id和time的实体对象
+     * @return int
+     * @author 蔡明涛
+     * @date 2020/3/22 12:06
+     */
+    @Override
+    public int update(Long id, InOutItem inOutItem) {
+        inOutItem.setUpdateTime(new Date());
+        inOutItem.setId(id);
+        return mapper.updateById(inOutItem);
     }
 }

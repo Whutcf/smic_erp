@@ -1,4 +1,4 @@
-package com.jshlearn.smicerp.service.impl;
+package com.jshlearn.smicerp.service;
 
 import com.jshlearn.smicerp.pojo.Role;
 

@@ -42,4 +42,14 @@ public interface InOutItemService {
      * @date 2020/3/19 23:07
      */
     int add(InOutItem inOutItem);
+
+    /**
+     * 更新
+     * @param id Long id
+     * @param inOutItem 不包含id和time的实体对象
+     * @return int
+     * @author 蔡明涛
+     * @date 2020/3/22 12:06
+     */
+    int update(Long id, InOutItem inOutItem);
 }

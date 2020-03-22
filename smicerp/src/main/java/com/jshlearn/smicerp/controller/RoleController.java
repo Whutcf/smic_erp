@@ -1,7 +1,7 @@
 package com.jshlearn.smicerp.controller;
 
 import com.jshlearn.smicerp.pojo.Role;
-import com.jshlearn.smicerp.service.impl.RoleService;
+import com.jshlearn.smicerp.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
