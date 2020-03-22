@@ -110,8 +110,8 @@
             async: false,
             success: function (res) {
                 if (res && res.code === 200) {
-                    if(res.data && res.data.page) {
-                        var array = res.data.page.rows;
+                    if(res.data) {
+                        var array = res.data.rows;
                         if(array.length > 0) {
                             info = array[0];
                         }

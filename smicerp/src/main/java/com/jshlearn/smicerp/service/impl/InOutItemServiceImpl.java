@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jshlearn.smicerp.constants.BusinessConstants;
 import com.jshlearn.smicerp.mapper.InOutItemMapper;
 import com.jshlearn.smicerp.pojo.InOutItem;
 import com.jshlearn.smicerp.service.InOutItemService;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,7 +30,7 @@ import java.util.Map;
 @Service
 public class InOutItemServiceImpl implements InOutItemService {
     @Resource
-    private InOutItemMapper mapper;
+    private InOutItemMapper inOutItemMapper;
 
     @Override
     public Map<String,Object> selectPage(InOutItem inOutItem, Integer currentPage, Integer pageSize) {
@@ -37,9 +39,9 @@ public class InOutItemServiceImpl implements InOutItemService {
         queryWrapper.like(StringUtils.isNotBlank(inOutItem.getName()),InOutItem::getName,inOutItem.getName());
         queryWrapper.eq(StringUtils.isNotBlank(inOutItem.getType()),InOutItem::getType,inOutItem.getType());
         queryWrapper.like(StringUtils.isNotBlank(inOutItem.getRemark()),InOutItem::getRemark,inOutItem.getRemark());
-        queryWrapper.eq(InOutItem::getDeleteFlag,"0");
+        queryWrapper.eq(InOutItem::getDeleteFlag,BusinessConstants.DELETE_FLAG_EXISTS);
         Page<InOutItem> page = new Page<>(currentPage,pageSize);
-        IPage<InOutItem> iPage = mapper.selectPage(page,queryWrapper);
+        IPage<InOutItem> iPage = inOutItemMapper.selectPage(page,queryWrapper);
         return EasyUiPageUtil.pageResult(iPage.getTotal(),iPage.getRecords());
     }
 
@@ -53,7 +55,7 @@ public class InOutItemServiceImpl implements InOutItemService {
     @Override
     @Transactional(readOnly = true)
     public InOutItem getItemByName(String name) {
-        return new LambdaQueryChainWrapper<InOutItem>(mapper).eq(InOutItem::getName,name).one();
+        return new LambdaQueryChainWrapper<InOutItem>(inOutItemMapper).eq(InOutItem::getName,name).one();
     }
 
     /**
@@ -68,7 +70,7 @@ public class InOutItemServiceImpl implements InOutItemService {
     @Transactional(rollbackFor = Exception.class)
     public int add(InOutItem inOutItem) {
         inOutItem.setCreateTime(new Date());
-        return mapper.insert(inOutItem);
+        return inOutItemMapper.insert(inOutItem);
     }
 
     /**
@@ -84,6 +86,26 @@ public class InOutItemServiceImpl implements InOutItemService {
     public int update(Long id, InOutItem inOutItem) {
         inOutItem.setUpdateTime(new Date());
         inOutItem.setId(id);
-        return mapper.updateById(inOutItem);
+        return inOutItemMapper.updateById(inOutItem);
+    }
+
+    /**
+     * 根据类型获取in out
+     *
+     * @param type 类型
+     * @return java.util.List<com.jshlearn.smicerp.pojo.InOutItem>
+     * @author 蔡明涛
+     * @date 2020/3/22 22:45
+     */
+    @Override
+    public List<InOutItem> findBySelect(String type) {
+        LambdaQueryWrapper<InOutItem> queryWrapper = Wrappers.lambdaQuery();
+        if(type.equals(BusinessConstants.IN_OUT_TYPE_IN_CODE)){
+            queryWrapper.eq(InOutItem::getType,BusinessConstants.IN_OUT_TYPE_IN);
+        }else if (type.equals(BusinessConstants.IN_OUT_TYPE_OUT_CODE)){
+            queryWrapper.eq(InOutItem::getType,BusinessConstants.IN_OUT_TYPE_OUT);
+        }
+        queryWrapper.eq(InOutItem::getDeleteFlag,BusinessConstants.DELETE_FLAG_EXISTS);
+        return inOutItemMapper.selectList(queryWrapper);
     }
 }

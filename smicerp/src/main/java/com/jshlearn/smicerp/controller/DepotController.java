@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,6 +59,21 @@ public class DepotController {
             return ResultBeanUtil.error(ExceptionConstants.DEPOT_EDIT_FAILED_CODE,ExceptionConstants.DEPOT_EDIT_FAILED_MSG);
         }
     }
+
+    /**
+     * 获取仓库的所有信息
+     * @param request 页面请求
+     * @return com.jshlearn.smicerp.utils.ResultBean<java.util.List<com.jshlearn.smicerp.pojo.Depot>>
+     * @author 蔡明涛
+     * @date 2020/3/22 21:20
+     */
+    @GetMapping("/getAllList")
+    public ResultBean<List<Depot>> getAllList(HttpServletRequest request){
+        List<Depot> depotList = depotService.getAllList();
+        return ResultBeanUtil.success(depotList);
+    }
+
+
 
     // TODO 删除和增加选项由于系统的相关模块还未完善，暂不处理
 

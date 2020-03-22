@@ -2,6 +2,7 @@ package com.jshlearn.smicerp.service;
 
 import com.jshlearn.smicerp.pojo.Depot;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,4 +31,13 @@ public interface DepotService {
      * @date 2020/3/19 19:48
      */
     int setDepotIsDefault(Long id);
+
+    /**
+     * 获取所有仓库信息
+     *
+     * @return java.util.List<com.jshlearn.smicerp.pojo.Depot>
+     * @author 蔡明涛
+     * @date 2020/3/22 21:21
+     */
+    List<Depot> getAllList();
 }

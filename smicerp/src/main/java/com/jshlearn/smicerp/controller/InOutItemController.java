@@ -1,6 +1,7 @@
 package com.jshlearn.smicerp.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jshlearn.smicerp.constants.ExceptionConstants;
 import com.jshlearn.smicerp.constants.PageConstants;
@@ -15,10 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
- * @Description TODO
+ * @Description 收支项目管理
  * @ClassName InOutItemController
  * @Author 蔡明涛
  * @Date 2020/3/19 22:27
@@ -64,6 +66,30 @@ public class InOutItemController {
         int i = inOutItemService.update(id,inOutItem);
         return i>0 ? ResultBeanUtil.success(): ResultBeanUtil.error(ExceptionConstants.IN_OUT_ITEM_ADD_FAILED_CODE,ExceptionConstants.IN_OUT_ITEM_EDIT_FAILED_MSG);
     }
+
+    /**
+     * 查找收支项目信息-下拉框
+     * @param type 收支类型
+     * @param request 请求
+     * @return com.alibaba.fastjson.JSONArray
+     * @author 蔡明涛
+     * @date 2020/3/22 22:59
+     */
+    @GetMapping("/findBySelect")
+    public JSONArray findBySelect(@RequestParam(PageConstants.TYPE) String type,HttpServletRequest request){
+        JSONArray jsonArray = new JSONArray();
+        List<InOutItem> inOutItemList = inOutItemService.findBySelect(type);
+        if (inOutItemList != null){
+            for (InOutItem inOutItem : inOutItemList) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("Id",inOutItem.getId());
+                jsonObject.put("InOutItemName",inOutItem.getName());
+                jsonArray.add(jsonObject);
+            }
+        }
+        return jsonArray;
+    }
+
 
     // TODO 删除模块需要等财务模块写好再重构
 

@@ -2,6 +2,7 @@ package com.jshlearn.smicerp.service;
 
 import com.jshlearn.smicerp.pojo.Account;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,4 +60,13 @@ public interface AccountService {
      * @date 2020/3/22 11:47
      */
     int update(Long id, Account account);
+
+    /**
+     * 获取所有账户信息
+     *
+     * @return java.util.List<com.jshlearn.smicerp.pojo.Account>
+     * @author 蔡明涛
+     * @date 2020/3/22 22:06
+     */
+    List<Account> getAllList();
 }

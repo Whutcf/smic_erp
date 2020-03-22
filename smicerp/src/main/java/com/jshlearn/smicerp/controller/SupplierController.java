@@ -1,5 +1,6 @@
 package com.jshlearn.smicerp.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jshlearn.smicerp.constants.BusinessConstants;
 import com.jshlearn.smicerp.constants.ExceptionConstants;
@@ -147,4 +148,29 @@ public class SupplierController {
         ExcelUtils.export(excelName, titles, exportData, response);
     }
 
+    /**
+     * 获取会员信息下拉框
+     *
+     * @param request 请求
+     * @return com.alibaba.fastjson.JSONArray
+     * @author 蔡明涛
+     * @date 2020/3/22 22:24
+     */
+    @PostMapping("/findBySelect_retail")
+    public JSONArray findBySelectRetail(HttpServletRequest request) {
+        JSONArray jsonArray = new JSONArray();
+        List<Supplier> supplierList = supplierService.findBySelectRetail();
+        if (null != supplierList) {
+            for (Supplier supplier : supplierList) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id",supplier.getId());
+                // 客户名称
+                jsonObject.put("supplier",supplier.getSupplier());
+                // 预收款
+                jsonObject.put("advanceIn",supplier.getAdvanceIn());
+                jsonArray.add(jsonObject);
+            }
+        }
+        return jsonArray;
+    }
 }

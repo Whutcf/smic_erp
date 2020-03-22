@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -109,5 +110,17 @@ public class AccountServiceImpl implements AccountService {
         account.setId(id);
         account.setUpdateTime(new Date());
         return accountMapper.updateById(account);
+    }
+
+    /**
+     * 获取所有账户信息
+     *
+     * @return java.util.List<com.jshlearn.smicerp.pojo.Account>
+     * @author 蔡明涛
+     * @date 2020/3/22 22:06
+     */
+    @Override
+    public List<Account> getAllList() {
+        return accountMapper.selectList(new LambdaQueryWrapper<Account>().eq(Account::getDeleteFlag,"0"));
     }
 }

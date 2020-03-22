@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,6 +65,12 @@ public class AccountController {
         Account account = (Account)ErpCustomUtils.getClassObject(info,Account.class);
         int i = accountService.update(id,account);
         return i>0 ? ResultBeanUtil.success(): ResultBeanUtil.error(ExceptionConstants.ACCOUNT_EDIT_FAILED_CODE,ExceptionConstants.ACCOUNT_EDIT_FAILED_MSG);
+    }
+
+    @GetMapping("/getAccount")
+    public ResultBean<List<Account>> getAllList(){
+        List<Account> accountList = accountService.getAllList();
+        return ResultBeanUtil.success(accountList);
     }
 
     // TODO 删除接口和账户出入详情接口

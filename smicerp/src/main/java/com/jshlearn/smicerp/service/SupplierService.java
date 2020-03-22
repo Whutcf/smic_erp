@@ -67,4 +67,13 @@ public interface SupplierService {
      * @date 2020/3/17 22:33
      */
     List<Supplier> getExcelData(String supplier, String type, String phoneNum, String telephone, String description);
+
+    /**
+     * 获取所有会员信息
+     *
+     * @return java.util.List<com.jshlearn.smicerp.pojo.Supplier>
+     * @author 蔡明涛
+     * @date 2020/3/22 22:26
+     */
+    List<Supplier> findBySelectRetail();
 }

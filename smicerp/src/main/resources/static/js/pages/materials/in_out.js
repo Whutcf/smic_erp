@@ -470,7 +470,8 @@
 			striped : true,
 			pageSize: 10,
 			pageList: initPageNum,
-			columns:[[
+			columns:[
+				[
 				{ field: 'id',width:35,align:"center",checkbox:true},
 				{ title: '操作',field: 'op',align:"center",width:opWidth,
 					formatter:function(value,rec,index) {
@@ -523,7 +524,8 @@
                         }
 					}
 				}
-			]],
+			]
+			],
 			toolbar:tableToolBar,
 			onLoadError:function() {
 				$.messager.alert('页面加载提示','页面加载异常，请稍后再试！','error');

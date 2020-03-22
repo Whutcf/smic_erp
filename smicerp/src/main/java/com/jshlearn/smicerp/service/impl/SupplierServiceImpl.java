@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jshlearn.smicerp.constants.BusinessConstants;
 import com.jshlearn.smicerp.mapper.SupplierMapper;
 import com.jshlearn.smicerp.pojo.Supplier;
 import com.jshlearn.smicerp.service.SupplierService;
@@ -41,7 +43,7 @@ public class SupplierServiceImpl implements SupplierService {
         lambdaQuery.eq(StringUtils.isNotBlank(supplier.getPhoneNum()),Supplier::getPhoneNum,supplier.getPhoneNum());
         lambdaQuery.eq(StringUtils.isNotBlank(supplier.getTelephone()),Supplier::getTelephone,supplier.getTelephone());
         lambdaQuery.like(StringUtils.isNotBlank(supplier.getDescription()),Supplier::getDescription,supplier.getDescription());
-        lambdaQuery.eq(Supplier::getDeleteFlag,"0");
+        lambdaQuery.eq(Supplier::getDeleteFlag,BusinessConstants.DELETE_FLAG_EXISTS);
         Page<Supplier> page = new Page<>(currentPage,pageSize);
         IPage<Supplier> iPage = supplierMapper.selectPage(page,lambdaQuery);
         return EasyUiPageUtil.pageResult(iPage.getTotal(),iPage.getRecords());
@@ -71,5 +73,18 @@ public class SupplierServiceImpl implements SupplierService {
     public List<Supplier> getExcelData(String supplier, String type, String phoneNum, String telephone, String description) {
         // 练习Mybatis的基本写法
         return supplierMapper.getExcelDataByParams(supplier,type,phoneNum,telephone,description);
+    }
+
+    /**
+     * 获取所有会员信息
+     *
+     * @return java.util.List<com.jshlearn.smicerp.pojo.Supplier>
+     * @author 蔡明涛
+     * @date 2020/3/22 22:26
+     */
+    @Override
+    public List<Supplier> findBySelectRetail() {
+        return new LambdaQueryChainWrapper<>(supplierMapper).eq(Supplier::getType, BusinessConstants.SUPPLIER_TYPE_CUSTOMER)
+                .eq(Supplier::getDeleteFlag,BusinessConstants.DELETE_FLAG_EXISTS).orderByDesc(Supplier::getId).list();
     }
 }

@@ -2,6 +2,7 @@ package com.jshlearn.smicerp.service;
 
 import com.jshlearn.smicerp.pojo.InOutItem;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,4 +53,13 @@ public interface InOutItemService {
      * @date 2020/3/22 12:06
      */
     int update(Long id, InOutItem inOutItem);
+
+    /**
+     * 根据类型获取in out
+     * @param type 类型
+     * @return java.util.List<com.jshlearn.smicerp.pojo.InOutItem>
+     * @author 蔡明涛
+     * @date 2020/3/22 22:45
+     */
+    List<InOutItem> findBySelect(String type);
 }
