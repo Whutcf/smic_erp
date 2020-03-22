@@ -10,6 +10,8 @@ public class PageConstants {
 
     //查询参数
 
+    public static final String PAGE_PREFIX = "pages/";
+    public static final String ID = "id";
     public final static String PAGE_SIZE = "pageSize";
     public final static String CURRENT_PAGE = "currentPage";
     public final static String ORDER = "order";
@@ -36,5 +38,4 @@ public class PageConstants {
 
     public final static String LEVEL="level";
 
-    public static final String ID = "id";
 }

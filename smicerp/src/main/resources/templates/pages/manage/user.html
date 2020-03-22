@@ -174,7 +174,8 @@
             striped: true,
             pageSize: initPageSize,
             pageList: initPageNum,
-            columns: [[
+            columns: [
+                [
                 {field: 'id', width: 35, align: "center", checkbox:true},
                 {
                     title: '操作', field: 'isystem', align: "center", width: 80, formatter: function (value, rec, index) {
@@ -200,7 +201,8 @@
                 {title: '用户排序', field: 'userBlngOrgaDsplSeq', width: 60, align: "center"},
                 {title: '描述', field: 'description', width: 130},
                 {field: 'orgaId',hidden:true, width: 10}
-            ]],
+            ]
+            ],
             toolbar: [
                 {
                     id: 'addUser',

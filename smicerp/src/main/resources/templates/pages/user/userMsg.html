@@ -85,7 +85,8 @@
             //loadFilter: pagerFilter,
             pageSize: initPageSize,
             pageList: initPageNum,
-            columns: [[
+            columns: [
+                [
                 {field: 'id', width: 35, align: "center", checkbox: true},
                 {title: '消息标题', field: 'msgTitle', width: 300,formatter: function (value,res) {
                         if(res.status == 1) {
@@ -102,7 +103,8 @@
                             return "<b style='color:green'>已读</b>";
                         }
                     }}
-            ]],
+            ]
+            ],
             toolbar: [
                 {
                     id: 'setStatus',

@@ -113,7 +113,8 @@
             //loadFilter: pagerFilter,
             pageSize: initPageSize,
             pageList: initPageNum,
-            columns: [[
+            columns: [
+                [
                 {field: 'id', width: 35, align: "center", checkbox: true},
                 {
                     title: '操作', field: 'op', align: "center", width: 80, formatter: function (value, rec) {
@@ -125,7 +126,8 @@
                     }
                 },
                 {title: '角色名称', field: 'name', width: 200}
-            ]],
+            ]
+            ],
             toolbar: [
                 {
                     id: 'addRole',

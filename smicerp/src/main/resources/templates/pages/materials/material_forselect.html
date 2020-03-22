@@ -84,13 +84,15 @@
                 //loadFilter: pagerFilter,
                 pageSize: initPageSize,
                 pageList: initPageNum,
-                columns: [[
+                columns: [
+                    [
                     {field: 'id', width: 35, align: "center", hidden: true},
                     {title: '品名', field: 'name', width: 150},
                     {title: '型号', field: 'model', width: 100},
                     {title: '类别', field: 'categoryName', width: 130},
                     {title: '单位', field: 'unit', width: 60}
-                ]],
+                ]
+                ],
                 toolbar: [
                 ],
                 onLoadError: function () {

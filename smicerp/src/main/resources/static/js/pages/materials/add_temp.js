@@ -1,4 +1,4 @@
-$.get("../../pages/template/base.html?789", function(tem) {
+$.get("/template/base.html?789", function(tem) {
     if(tem) {
         var template = Handlebars.compile(tem);
         /**

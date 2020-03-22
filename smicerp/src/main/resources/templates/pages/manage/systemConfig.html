@@ -112,7 +112,8 @@
             striped: true,
             pageSize: initPageSize,
             pageList: initPageNum,
-            columns: [[
+            columns: [
+                [
                 {field: 'id', width: 35, align: "center", checkbox:true},
                 {
                     title: '操作', field: 'op', align: "center", width: 80, formatter: function (value, rec) {
@@ -143,7 +144,8 @@
                         return parseFlag(value);
                     }
                 }
-            ]],
+            ]
+            ],
             toolbar: [
                 {
                     id: 'addSystemConfig',

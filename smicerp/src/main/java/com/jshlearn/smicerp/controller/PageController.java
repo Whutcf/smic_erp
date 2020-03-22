@@ -1,8 +1,10 @@
 package com.jshlearn.smicerp.controller;
 
+import com.jshlearn.smicerp.constants.PageConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -71,69 +73,20 @@ public class PageController {
         return "pages/user/userHelp";
     }
 
-
-    // 商品相关的页面跳转
-
-    @GetMapping("/pages/materials/material")
-    public String toMaterial() {
-        log.info("======== 跳转到商品管理页面 ========");
-        return "pages/materials/material";
-    }
-
-    // 供应商相关的页面跳转
-    
-    @GetMapping("/pages/manage/vendor")
-    public String toVendor() {
-        log.info("======== 跳转到供应商页面 ========");
-        return "pages/manage/vendor";
-    }
-
-    // 客户相关的页面跳转
-
-    @GetMapping("/pages/manage/customer")
-    public String toCustomer() {
-        log.info("======== 跳转到客户页面 ========");
-        return "pages/manage/customer";
-    }
-
-    // 会员相关的页面跳转
-
-    @GetMapping("/pages/manage/member")
-    public String toMember() {
-        log.info("======== 跳转到会员页面 ========");
-        return "pages/manage/member";
-    }
-
-    // 仓库相关的页面跳转
-
-    @GetMapping("/pages/manage/depot")
-    public String toDepot() {
-        log.info("======== 跳转到仓库页面 ========");
-        return "pages/manage/depot";
-    }
-
-    // 收支项目页面跳转
-
-    @GetMapping("/pages/manage/inOutItem")
-    public String toInOutItem(){
-        log.info("======== 跳转收支项目页 ========");
-        return "pages/manage/inOutItem";
-    }
-
-    // 结算账户页面跳转
-
-    @GetMapping("/pages/manage/account")
-    public String toAccount(){
-        log.info("======== 跳转结算账户页 ========");
-        return "pages/manage/account";
-    }
-
-    // 经手人页面跳转
-
-    @GetMapping("/pages/materials/person")
-    public String toPerson(){
-        log.info("======== 跳转经手人页 ========");
-        return "pages/materials/person";
+    /**
+     * 通用跳转页面
+     *
+     * @param sourceName 页面的分类
+     * @param page       跳转的页面
+     * @return java.lang.String
+     * @author 蔡明涛
+     * @date 2020/3/22 14:17
+     */
+    @GetMapping("/pages/{sourceName}/{page}")
+    public String toPage(@PathVariable("sourceName") String sourceName,
+                         @PathVariable("page") String page) {
+        log.info("========= 跳转" + page + "页面 ========");
+        return PageConstants.PAGE_PREFIX + sourceName + "/" + page;
     }
 }
 
