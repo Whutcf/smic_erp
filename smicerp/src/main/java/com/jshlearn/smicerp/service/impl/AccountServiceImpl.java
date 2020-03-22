@@ -92,6 +92,22 @@ public class AccountServiceImpl implements AccountService {
     public void updateAmountIsDefault(Long accountId, Boolean isDefault) {
         new LambdaUpdateChainWrapper<>(accountMapper).eq(Account::getId,accountId)
                 .set(Account::getIsDefault,isDefault)
-                .set(Account::getUpdateTime,new Date()).update();
+                .set(isDefault,Account::getUpdateTime,new Date()).update();
+    }
+
+    /**
+     * 更新账户信息
+     *
+     * @param id      账户id
+     * @param account 账户信息
+     * @return int
+     * @author 蔡明涛
+     * @date 2020/3/22 11:47
+     */
+    @Override
+    public int update(Long id, Account account) {
+        account.setId(id);
+        account.setUpdateTime(new Date());
+        return accountMapper.updateById(account);
     }
 }

@@ -49,4 +49,14 @@ public interface AccountService {
      * @date 2020/3/21 14:55
      */
     void updateAmountIsDefault(Long accountId, Boolean isDefault);
+
+    /**
+     *  更新账户信息
+     * @param id 账户id
+     * @param account 账户信息
+     * @return int
+     * @author 蔡明涛
+     * @date 2020/3/22 11:47
+     */
+    int update(Long id, Account account);
 }

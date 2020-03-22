@@ -59,6 +59,13 @@ public class AccountController {
         accountService.updateAmountIsDefault(accountId,isDefault);
     }
 
+    @PostMapping("/update")
+    public ResultBean<Account> update(@RequestParam(PageConstants.INFO) String info,@RequestParam(PageConstants.ID) Long id,HttpServletRequest request){
+        Account account = (Account)ErpCustomUtils.getClassObject(info,Account.class);
+        int i = accountService.update(id,account);
+        return i>0 ? ResultBeanUtil.success(): ResultBeanUtil.error(ExceptionConstants.ACCOUNT_EDIT_FAILED_CODE,ExceptionConstants.ACCOUNT_EDIT_FAILED_MSG);
+    }
+
     // TODO 删除接口和账户出入详情接口
 }
 
