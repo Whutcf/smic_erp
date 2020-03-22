@@ -1,9 +1,13 @@
 package com.jshlearn.smicerp.utils;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description 日期工具类
@@ -45,6 +49,39 @@ public class DateUtils {
      **/
     public static String getCurrentDate(){
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    /**
+     * 获取每月的第一天
+     * @param today 当天的日期 LocalDate.now()
+     * @return java.lang.String
+     * @author 蔡明涛
+     * @date 2020/3/22 17:25
+     */
+    public static String getFirstDayOfMonth(LocalDate today){
+        LocalDate firstDay = LocalDate.of(today.getYear(),today.getMonth(),1);
+        return firstDay.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public static String getLastDayOfMonth(LocalDate today){
+        LocalDate lastDay = today.with(TemporalAdjusters.lastDayOfMonth());
+        return lastDay.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    /**
+     *  根据传入的参数获取倒退i个月的月份 ex. 2020-03
+     * @param i 几个月
+     * @return java.util.List<java.lang.String>
+     * @author 蔡明涛
+     * @date 2020/3/22 17:38
+     */
+    public static List<String> getMonthsFromNow(Long i){
+        LocalDate today = LocalDate.now();
+        List<String> monthList = new ArrayList<>();
+        for (long j = i-1; j >= 0; j--) {
+            monthList.add(today.minusMonths(j).format(DateTimeFormatter.ofPattern("yyyy-MM")));
+        }
+        return  monthList;
     }
 
 }

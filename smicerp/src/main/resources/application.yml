@@ -6,7 +6,7 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     encoding: UTF-8
-    #热部署文件，页面不产生缓存，及时更新
+    #鐑儴缃叉枃浠讹紝椤甸潰涓嶄骇鐢熺紦瀛橈紝鍙婃椂鏇存柊
     cache: false
 
 
