@@ -35,6 +35,12 @@ public class PageController {
         return "index";
     }
 
+    @RequestMapping("")
+    public String index() {
+        log.info("======== 跳转到主页 ========");
+        return "index";
+    }
+
     @RequestMapping("/noPermission")
     public String toNoPermission() {
         log.info("======== 跳转到没权限页面 ========");
@@ -120,6 +126,14 @@ public class PageController {
     public String toAccount(){
         log.info("======== 跳转结算账户页 ========");
         return "pages/manage/account";
+    }
+
+    // 经手人页面跳转
+
+    @GetMapping("/pages/materials/person")
+    public String toPerson(){
+        log.info("======== 跳转经手人页 ========");
+        return "pages/materials/person";
     }
 }
 

@@ -2,6 +2,8 @@ package com.jshlearn.smicerp.service;
 
 import com.jshlearn.smicerp.pojo.User;
 
+import java.util.List;
+
 /**
  * @author 蔡明涛
  */
@@ -58,4 +60,12 @@ public interface UserService {
      * @date 2020/3/15 15:57
      */
     int getUserCount();
+
+    /**
+     * 获取所有用户信息
+     * @return java.util.List<com.jshlearn.smicerp.pojo.User>
+     * @author 蔡明涛
+     * @date 2020/3/21 23:19
+     */
+    List<User> getAll();
 }

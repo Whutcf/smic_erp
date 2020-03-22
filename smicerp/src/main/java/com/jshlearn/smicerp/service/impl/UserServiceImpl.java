@@ -117,4 +117,16 @@ public class UserServiceImpl implements UserService {
         query.eq(User::getStatus, BusinessConstants.USER_STATUS_NORMAL);
         return userMapper.selectCount(query);
     }
+
+    /**
+     * 获取所有用户信息
+     *
+     * @return java.util.List<com.jshlearn.smicerp.pojo.User>
+     * @author 蔡明涛
+     * @date 2020/3/21 23:19
+     */
+    @Override
+    public List<User> getAll() {
+        return userMapper.selectList(null);
+    }
 }

@@ -90,6 +90,8 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public void updateAmountIsDefault(Long accountId, Boolean isDefault) {
-        new LambdaUpdateChainWrapper<>(accountMapper).eq(Account::getId,accountId).set(Account::getIsDefault,isDefault).set(Account::getUpdateTime,new Date()).update();
+        new LambdaUpdateChainWrapper<>(accountMapper).eq(Account::getId,accountId)
+                .set(Account::getIsDefault,isDefault)
+                .set(Account::getUpdateTime,new Date()).update();
     }
 }

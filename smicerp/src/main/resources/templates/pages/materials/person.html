@@ -21,15 +21,11 @@
         <tr>
             <td>姓名：</td>
             <td>
-                <input name="searchName" id="searchName" style="width:70px;"/>
+                <input name="searchName" id="searchName" style="width:80px;" class="easyui-combobox"/>
             </td>
             <td>类型：</td>
             <td>
-                <select name="searchType" id="searchType" style="width:70px;">
-                    <option value="">全部</option>
-                    <option value="业务员">业务员</option>
-                    <option value="仓管员">仓管员</option>
-                    <option value="财务员">财务员</option>
+                <select name="searchType" id="searchType" style="width:80px;" class="easyui-combobox">
                 </select>
             </td>
             <td>&nbsp;</td>
@@ -59,10 +55,6 @@
                 <td>类型</td>
                 <td style="padding:5px">
                     <select name="Type" id="Type" style="width:230px;">
-                        <option value="">请选择</option>
-                        <option value="业务员">业务员</option>
-                        <option value="仓管员">仓管员</option>
-                        <option value="财务员">财务员</option>
                     </select>
                 </td>
             </tr>
@@ -81,15 +73,79 @@
         initTableData();
         ininPager();
         initForm();
+        initRole();
+        initUser();
     });
 
-    //防止表单提交重复
+    // 初始化角色下拉框
+    function initRole() {
+        $("#searchType").combobox({
+            prompt:'输入首关键字自动检索',
+            panelHeight: 'auto',
+            url:"/role/getRoleNames",
+            valueField : 'value',
+            textField : 'text',
+            editable:true,
+            hasDownArrow:true,
+            filter: function(q, row){
+                const opts = $(this).combobox('options');
+                return row[opts.textField].indexOf(q) >= 0;
+            }
+        })
+    }
+
+    // 初始化用户下拉框
+    function initUser() {
+        $("#searchName").combobox({
+            prompt:'输入首关键字自动检索',
+            panelHeight: '200',
+            url:"/user/getUserNames",
+            valueField : 'value',
+            textField : 'text',
+            editable:true,
+            hasDownArrow:true,
+            filter: function(q, row){
+                const opts = $(this).combobox('options');
+                return row[opts.textField].indexOf(q) >= 0;
+            }
+        })
+    }
+
+    //防止表单提交重复，及初始化下拉菜单栏
     function initForm() {
         $('#personFM').form({
             onSubmit: function () {
                 return false;
             }
         });
+        $("#Name").combobox({
+            prompt:'输入首关键字自动检索',
+            panelHeight: '200',
+            url:"/user/getUserNames",
+            valueField : 'value',
+            textField : 'text',
+            editable:true,
+            hasDownArrow:true,
+            filter: function(q, row){
+                const opts = $(this).combobox('options');
+                return row[opts.textField].indexOf(q) >= 0;
+            }
+        });
+
+        $("#Type").combobox({
+            prompt:'输入首关键字自动检索',
+            panelHeight: 'auto',
+            url:"/role/getRoleNames",
+            valueField : 'value',
+            textField : 'text',
+            editable:true,
+            hasDownArrow:true,
+            filter: function(q, row){
+                const opts = $(this).combobox('options');
+                return row[opts.textField].indexOf(q) >= 0;
+            }
+        })
+
     }
 
     //初始化表格数据
@@ -116,7 +172,8 @@
             //loadFilter: pagerFilter,
             pageSize: initPageSize,
             pageList: initPageNum,
-            columns: [[
+            columns: [
+                [
                 {field: 'id', width: 35, align: "center", checkbox: true},
                 {title: '姓名', field: 'name', width: 180},
                 {title: '类型', field: 'type', width: 180},
@@ -129,7 +186,8 @@
                         return str;
                     }
                 }
-            ]],
+            ]
+            ],
             toolbar: [
                 {
                     id: 'addPerson',
@@ -332,6 +390,8 @@
         if(checkPower()){
             return;
         }
+        // 保证combobox一直是开放的
+        $("#Name").combobox('enable');
         $('#personFM').form('clear');
         $('#personDlg').dialog('open').dialog('setTitle', '<img src="/js/easyui-1.3.5/themes/icons/edit_add.png"/>&nbsp;增加经手人信息');
         $(".window-mask").css({width: webW, height: webH});
@@ -344,7 +404,7 @@
 
     //保存信息
     $("#savePerson").off("click").on("click", function () {
-        if (!$("#Type").val()) {
+        if (!$("#Type").combobox('getText')) {
             $.messager.alert('提示', '请选择类型！', 'warning');
             return;
         }
@@ -356,16 +416,25 @@
             data: ({
                 info: JSON.stringify($("#personFM").serializeObject())
             }),
+            beforeSend:function(){
+                $("#Name").combobox('enable');
+            },
             success: function(res) {
                 if(res && res.code === 200) {
                     $('#personDlg').dialog('close');
                     //加载完以后重新初始化
                     var opts = $("#tableData").datagrid('options');
                     showPersonDetails(opts.pageNumber, opts.pageSize);
+                }else {
+                    $.messager.alert('提示',res.message, 'error');
                 }
             },
             //此处添加错误处理
             error: function () {
+                // 更新处理失败还是需要锁定combobox
+                if(url.indexOf('update') !== -1 ){
+                    $("#Name").combobox('disable');
+                }
                 $.messager.alert('提示', '保存经手人信息异常，请稍后再试！', 'error');
                 return;
             }
@@ -375,16 +444,16 @@
     //编辑信息
     function editPerson(personTotalInfo) {
         var personInfo = personTotalInfo.split("AaBb");
-
-        $("#Name").val(personInfo[1]);
-        $("#Type").val(personInfo[2]);
-
-        //oldPerson = personInfo[1];
+        console.log(personInfo);
+        $("#Name").combobox('setValue',personInfo[1]);
+        $("#Type").combobox('setValue',personInfo[2]);
+        $("#Name").combobox('disable');
         $('#personDlg').dialog('open').dialog('setTitle', '<img src="/js/easyui-1.3.5/themes/icons/pencil.png"/>&nbsp;编辑经手人信息');
         $(".window-mask").css({width: webW, height: webH});
         personID = personInfo[0];
         //焦点在名称输入框==定焦在输入文字后面
         $("#Name").val("").focus().val(personInfo[1]);
+
         url = '/person/update?id=' + personInfo[0];
     }
 
@@ -404,8 +473,8 @@
     });
 
     function showPersonDetails(pageNo, pageSize) {
-        var name = $.trim($("#searchName").val());
-        var type = $.trim($("#searchType").val());
+        var name = $("#searchName").combobox('getValue');
+        var type = $("#searchType").combobox('getValue');
         $.ajax({
             type: "get",
             url: "/person/list",
@@ -420,8 +489,8 @@
             }),
             success: function (res) {
                 if(res && res.code === 200){
-                    if(res.data && res.data.page) {
-                        $("#tableData").datagrid('loadData', res.data.page);
+                    if(res.data) {
+                        $("#tableData").datagrid('loadData', res.data);
                     }
                 }
             },
@@ -436,8 +505,8 @@
     //重置按钮
     $("#searchResetBtn").unbind().bind({
         click: function () {
-            $("#searchName").val("");
-            $("#searchType").val("");
+            $("#searchName").combobox();
+            $("#searchType").combobox();
             //加载完以后重新初始化
             $("#searchBtn").click();
         }

@@ -1,5 +1,6 @@
 package com.jshlearn.smicerp.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jshlearn.smicerp.constants.BusinessConstants;
 import com.jshlearn.smicerp.constants.ExceptionConstants;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * @Description 用户处理
@@ -247,5 +249,19 @@ public class UserController {
         jsonObject.put("total",total);
         return ResultBeanUtil.success(jsonObject);
     }
+
+    @PostMapping("/getUserNames")
+    public JSONArray getUserNames(){
+        List<User> userList = userService.getAll();
+        JSONArray jsonArray = new JSONArray();
+        for (User user : userList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("value",user.getUserName());
+            jsonObject.put("text",user.getUserName());
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray;
+    }
+
 
 }

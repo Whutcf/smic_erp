@@ -1,5 +1,7 @@
 package com.jshlearn.smicerp.utils;
 
+import com.jshlearn.smicerp.constants.PageConstants;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +16,8 @@ public class EasyUiPageUtil {
 
     public static Map<String,Object> pageResult(long total,List<?> rows){
         Map<String,Object> map = new HashMap<>(16);
-        map.put("total",total);
-        map.put("rows",rows);
+        map.put(PageConstants.TOTAL,total);
+        map.put(PageConstants.ROWS,rows);
         return map;
     }
 
