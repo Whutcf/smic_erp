@@ -1,11 +1,11 @@
 package com.jshlearn.smicerp.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.jshlearn.smicerp.constants.BusinessConstants;
 import com.jshlearn.smicerp.constants.PageConstants;
-import com.jshlearn.smicerp.pojo.DepotHead;
 import com.jshlearn.smicerp.service.DepotHeadService;
 import com.jshlearn.smicerp.utils.DateUtils;
-import com.jshlearn.smicerp.utils.ErpCustomUtils;
 import com.jshlearn.smicerp.utils.ResultBean;
 import com.jshlearn.smicerp.utils.ResultBeanUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -72,8 +72,9 @@ public class DepotHeadController {
                                                           @RequestParam(PageConstants.CURRENT_PAGE) Integer currentPage,
                                                           @RequestParam(PageConstants.PAGE_SIZE) Integer pageSize,
                                                           HttpServletRequest request) {
-        DepotHead depotHead = (DepotHead) ErpCustomUtils.getClassObject(search, DepotHead.class);
-        Map<String,Object> pageRecords = depotHeadService.selectPage(depotHead,currentPage,pageSize);
+        // search 包含的参数： type,subtype,state,number,beginTime,endTime,materialParam,depotIds
+        JSONObject parseObject = JSON.parseObject(search);
+        Map<String,Object> pageRecords = depotHeadService.selectPage(parseObject,currentPage,pageSize);
         return ResultBeanUtil.success(pageRecords);
     }
 }

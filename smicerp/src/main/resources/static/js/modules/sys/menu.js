@@ -12,8 +12,8 @@ function initSystemData(kid, type) {
         type: "get",
         url: "/userBusiness/getBasicData",
         data: ({
-            KeyId: kid,
-            Type: type
+            keyId: kid,
+            type: type
         }),
         //设置为同步
         async: false,

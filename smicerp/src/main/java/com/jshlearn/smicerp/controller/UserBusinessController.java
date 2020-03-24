@@ -29,8 +29,8 @@ public class UserBusinessController {
     private UserBusinessService userBusinessService;
 
     @GetMapping("/getBasicData")
-    public ResultBean<HashMap<String, List<UserBusiness>>> getBasicData(@RequestParam(value = "KeyId") String keyId,
-                                                                        @RequestParam(value = "Type") String type) {
+    public ResultBean<HashMap<String, List<UserBusiness>>> getBasicData(@RequestParam(value = "keyId") String keyId,
+                                                                        @RequestParam(value = "type") String type) {
         List<UserBusiness> userBusinessList = userBusinessService.getBasicData(keyId,type);
         if (userBusinessList.size()>0){
             HashMap<String, List<UserBusiness>> map = new HashMap<>(100);

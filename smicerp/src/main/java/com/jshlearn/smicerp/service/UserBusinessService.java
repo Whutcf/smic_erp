@@ -13,7 +13,8 @@ import java.util.List;
 public interface UserBusinessService {
     /**
      * 获取用户角色清单
-     * @param keyId 主Id, type 值
+     * @param keyId 用户id
+     * @param type 值
      * @return java.util.List<com.jshlearn.smicerp.pojo.UserBusiness>
      * @author 蔡明涛
      * @date 2020/3/14 12:11

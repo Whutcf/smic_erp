@@ -2,11 +2,9 @@ package com.jshlearn.smicerp.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @Description 单据子表
@@ -19,11 +17,11 @@ public class DepotItem {
     @TableId(value = "id",type = IdType.AUTO)
     private Long id;
     /**
-     * 表头Id
+     *  单据主表的id
      */
     private long headId;
     /**
-     * 材料Id
+     * 材料主表的Id
      */
     private long materialId;
     /**

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jshlearn.smicerp.mapper.DepotHeadMapper">
+    <resultMap id="baseResultMap" type="com.jshlearn.smicerp.pojo.DepotHead">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="sub_type" property="subType" jdbcType="VARCHAR"/>
+        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
+        <result column="default_number" property="defaultNumber" jdbcType="VARCHAR"/>
+        <result column="number" property="number" jdbcType="VARCHAR"/>
+        <result column="oper_person_name" property="operPersonName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="oper_time" property="operTime" jdbcType="TIMESTAMP"/>
+        <result column="org_id" property="orgId" jdbcType="BIGINT"/>
+        <result column="hands_person_id" property="handsPersonId" jdbcType="BIGINT"/>
+        <result column="account_id" property="accountId" jdbcType="BIGINT"/>
+        <result column="change_amount" property="changeAmount" jdbcType="DECIMAL"/>
+        <result column="allocation_project_id" property="allocationProjectId" jdbcType="BIGINT"/>
+        <result column="total_price" property="totalPrice" jdbcType="DECIMAL"/>
+        <result column="pay_type" property="payType" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="sales_man" property="salesMan" jdbcType="VARCHAR"/>
+        <result column="account_id_list" property="accountIdList" jdbcType="VARCHAR"/>
+        <result column="account_money_list" property="accountMoneyList" jdbcType="VARCHAR"/>
+        <result column="discount" property="discount" jdbcType="DECIMAL"/>
+        <result column="discount_money" property="discountMoney" jdbcType="DECIMAL"/>
+        <result column="discount_last_money" property="discountLastMoney" jdbcType="DECIMAL"/>
+        <result column="other_money" property="otherMoney" jdbcType="DECIMAL"/>
+        <result column="other_money_list" property="otherMoneyList" jdbcType="VARCHAR"/>
+        <result column="other_money_item" property="otherMoneyItem" jdbcType="VARCHAR"/>
+        <result column="account_day" property="accountDay" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="link_number" property="linkNumber" jdbcType="VARCHAR"/>
+        <result column="tenant_id" property="tenantId" jdbcType="BIGINT"/>
+        <result column="delete_flag" property="deleteFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap extends="baseResultMap" id="DepotHeadVo4List" type="com.jshlearn.smicerp.vo.DepotHeadVo4List">
+        <result column="projectName" property="projectName" jdbcType="VARCHAR"/>
+        <result column="orgName" property="orgName" jdbcType="VARCHAR"/>
+        <result column="handsPersonName" property="handsPersonName" jdbcType="VARCHAR"/>
+        <result column="accountName" property="accountName" jdbcType="VARCHAR"/>
+        <result column="allLocationProjectName" property="allocationProjectName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="selectByConditionDeportHead" resultMap="DepotHeadVo4List">
+        select distinct sdh.id, sdh.type, sdh.sub_type, sdh.project_id, sdh.default_number, sdh.number,
+        sdh.oper_person_name, sdh.create_time, sdh.oper_time, sdh.org_id, sdh.hands_person_id, sdh.account_id,
+        sdh.change_amount, sdh.allocation_project_id, sdh.total_price, sdh.pay_type, sdh.remark, sdh.sales_man,
+        sdh.account_id_list, sdh.account_money_list, sdh.discount, sdh.discount_money, sdh.discount_last_money,
+        sdh.other_money, sdh.other_money_list, sdh.other_money_item, sdh.account_day, sdh.status, sdh.link_number,
+        sdh.tenant_id, sdh.delete_flag, sd.name projectName,ss.supplier orgName,sp.name handsPersonName,sa.name
+        accountName,sd2.name allocationProjectName
+        from smic_erp.smic_depot_head sdh
+        left join smic_erp.smic_depot sd on sdh.project_id = sd.id and ifnull(sd.delete_flag, '0') != '1'
+        left join smic_erp.smic_supplier ss on sdh.org_id = ss.id and ifnull(ss.delete_flag, '0') != '1'
+        left join smic_erp.smic_person sp on sdh.hands_person_id = sp.id and ifnull(sp.delete_flag, '0') != '1'
+        left join smic_erp.smic_account sa on sdh.account_id = sa.id and ifnull(sa.delete_flag, '0') != '1'
+        left join smic_erp.smic_depot sd2
+        on sdh.allocation_project_id = sd2.id and ifnull(sd2.delete_flag, '0') != '1'
+        left join smic_erp.smic_depot_item sdi
+        on sdh.id = sdi.header_id and ifnull(sdi.delete_flag, '0') != '1'
+        left join smic_erp.smic_material sm on sdi.material_id = sm.id and ifnull(sm.delete_flag, '0') != '1'
+        where ifnull(sdh.delete_flag,'0') !='1'
+        <if test="type != null and type != ''">
+            and sdh.type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="subType != null and subType != ''">
+            and sdh.sub_type =#{subType,jdbcType=VARCHAR}
+        </if>
+        <if test="number != null and number != ''">
+            and sdh.number like concat('%',#{number},'%')
+        </if>
+        <if test="beginTime != null and beginTime != ''">
+            and sdh.oper_time &gt;= #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and sdh.oper_time &lt;= #{endTime}
+        </if>
+        <if test="materialParam != null and materialParam != ''">
+            and (sm.`Name` like concat('%',#{materialParam},'%') or sm.Model like concat('%',#{materialParam},'%'))
+        </if>
+        <if test="depotIdList == null and depotIdList.size == 0 ">
+            and sdi.depot_id in
+            <foreach collection="depotIdList" index="index" item="depotId" open="(" separator="," close=")">
+                #{depotId}
+            </foreach>
+        </if>
+        order by sdh.id desc
+        <if test="currentPage != null and pageSize != null and currentPage != '' and pageSize != ''">
+            limit #{currentPage},#{pageSize}
+        </if>
+    </select>
+
+    <select id="findMaterialsListByHeaderId" resultType="java.lang.String">
+        select group_concat(concat(smic_material.name, ' ', smic_material.model)) as mName
+        from smic_erp.smic_depot_item
+                 inner join smic_erp.smic_material on smic_depot_item.material_id = smic_material.id and
+                                                      ifnull(smic_material.delete_flag, '0') != '1'
+        where smic_erp.smic_depot_item.header_id = #{id}
+          and ifnull(smic_depot_item.delete_flag, '0') != '1'
+    </select>
+</mapper>

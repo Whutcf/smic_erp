@@ -70,7 +70,7 @@ public class DepotHead {
      */
     private BigDecimal changeAmount;
     /**
-     * 调拨时，对方项目Id
+     * 调拨时，对方仓库Id
      */
     private long allocationProjectId;
     /**
