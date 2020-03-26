@@ -25,7 +25,7 @@ public interface DepotHeadMapper extends BaseMapper<DepotHead> {
      * @param endTime 查询结束时间
      * @param materialParam 材料产品相关参数
      * @param depotIdList 仓库id的集合
-     * @param currentPage 当前页
+     * @param offSet 当前页
      * @param pageSize 每页显示记录数
      * @return java.util.List<com.jshlearn.smicerp.vo.DeportHeadVo4List>
      * @author 蔡明涛
@@ -38,7 +38,7 @@ public interface DepotHeadMapper extends BaseMapper<DepotHead> {
                                                        @Param("endTime") String endTime,
                                                        @Param("materialParam") String materialParam,
                                                        @Param("depotIdList") List<String> depotIdList,
-                                                       @Param("currentPage") Integer currentPage,
+                                                       @Param("offSet") Integer offSet,
                                                        @Param("pageSize") Integer pageSize);
 
     /**

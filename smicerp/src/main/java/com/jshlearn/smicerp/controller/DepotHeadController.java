@@ -74,7 +74,9 @@ public class DepotHeadController {
                                                           HttpServletRequest request) {
         // search 包含的参数： type,subtype,state,number,beginTime,endTime,materialParam,depotIds
         JSONObject parseObject = JSON.parseObject(search);
-        Map<String,Object> pageRecords = depotHeadService.selectPage(parseObject,currentPage,pageSize);
+        // 起始页设定
+        Integer offSet = (currentPage-1)*pageSize;
+        Map<String,Object> pageRecords = depotHeadService.selectPage(parseObject,offSet,pageSize);
         return ResultBeanUtil.success(pageRecords);
     }
 }

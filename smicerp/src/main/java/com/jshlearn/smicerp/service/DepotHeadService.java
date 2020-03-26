@@ -27,11 +27,11 @@ public interface DepotHeadService {
     /**
      * 分页查询
      * @param parseObject  查询参数的json对象
-     * @param currentPage 当前页
+     * @param offSet 起始页
      * @param pageSize 页面条数
      * @return java.util.Map<java.lang.String,java.lang.Object>
      * @author 蔡明涛
      * @date 2020/3/22 23:05
      */
-    Map<String, Object> selectPage(JSONObject parseObject, Integer currentPage, Integer pageSize);
+    Map<String, Object> selectPage(JSONObject parseObject, Integer offSet, Integer pageSize);
 }

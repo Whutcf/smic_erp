@@ -47,12 +47,7 @@
 
 
     <select id="selectByConditionDeportHead" resultMap="DepotHeadVo4List">
-        select distinct sdh.id, sdh.type, sdh.sub_type, sdh.project_id, sdh.default_number, sdh.number,
-        sdh.oper_person_name, sdh.create_time, sdh.oper_time, sdh.org_id, sdh.hands_person_id, sdh.account_id,
-        sdh.change_amount, sdh.allocation_project_id, sdh.total_price, sdh.pay_type, sdh.remark, sdh.sales_man,
-        sdh.account_id_list, sdh.account_money_list, sdh.discount, sdh.discount_money, sdh.discount_last_money,
-        sdh.other_money, sdh.other_money_list, sdh.other_money_item, sdh.account_day, sdh.status, sdh.link_number,
-        sdh.tenant_id, sdh.delete_flag, sd.name projectName,ss.supplier orgName,sp.name handsPersonName,sa.name
+        select distinct sdh.*,sd.name projectName,ss.supplier orgName,sp.name handsPersonName,sa.name
         accountName,sd2.name allocationProjectName
         from smic_erp.smic_depot_head sdh
         left join smic_erp.smic_depot sd on sdh.project_id = sd.id and ifnull(sd.delete_flag, '0') != '1'
@@ -81,18 +76,17 @@
             and sdh.oper_time &lt;= #{endTime}
         </if>
         <if test="materialParam != null and materialParam != ''">
-            and (sm.`Name` like concat('%',#{materialParam},'%') or sm.Model like concat('%',#{materialParam},'%'))
+            and (sm.name like concat('%',#{materialParam},'%') or sm.Model like concat('%',#{materialParam},'%'))
         </if>
-        <if test="depotIdList == null and depotIdList.size == 0 ">
+        <if test="depotIdList != null and depotIdList.size > 0 ">
             and sdi.depot_id in
             <foreach collection="depotIdList" index="index" item="depotId" open="(" separator="," close=")">
                 #{depotId}
             </foreach>
         </if>
         order by sdh.id desc
-        <if test="currentPage != null and pageSize != null and currentPage != '' and pageSize != ''">
-            limit #{currentPage},#{pageSize}
-        </if>
+        limit #{offSet},#{pageSize}
+
     </select>
 
     <select id="findMaterialsListByHeaderId" resultType="java.lang.String">

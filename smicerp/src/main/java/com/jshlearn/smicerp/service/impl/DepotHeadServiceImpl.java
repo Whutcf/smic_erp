@@ -7,6 +7,7 @@ import com.jshlearn.smicerp.constants.PageConstants;
 import com.jshlearn.smicerp.mapper.DepotHeadMapper;
 import com.jshlearn.smicerp.pojo.DepotHead;
 import com.jshlearn.smicerp.service.DepotHeadService;
+import com.jshlearn.smicerp.utils.CommonUtils;
 import com.jshlearn.smicerp.vo.DepotHeadVo4List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,14 +55,14 @@ public class DepotHeadServiceImpl implements DepotHeadService {
      * 分页查询
      *
      * @param parseObject 查询参数的json对象
-     * @param currentPage 当前页
+     * @param offSet 起始页
      * @param pageSize    页面条数
      * @return java.util.Map<java.lang.String, java.lang.Object>
      * @author 蔡明涛
      * @date 2020/3/22 23:05
      */
     @Override
-    public Map<String, Object> selectPage(JSONObject parseObject, Integer currentPage, Integer pageSize) {
+    public Map<String, Object> selectPage(JSONObject parseObject, Integer offSet, Integer pageSize) {
         // parseObject 包含的参数： type,subType,state(未用到),number,beginTime,endTime,materialParam,depotIds
         String type = (String) parseObject.get("type");
         String subType = (String) parseObject.get("subType");
@@ -69,11 +70,17 @@ public class DepotHeadServiceImpl implements DepotHeadService {
         String beginTime = (String) parseObject.get("beginTime");
         String endTime = (String) parseObject.get("endTime");
         String materialParam = (String) parseObject.get("materialParam");
+        // string字符串转集合才能用mybatis的foreach，否则直接用${depotIds}就可以了
+        // 下面的操作仅仅练习使用，正常不这样操作
         String depotIds = (String) parseObject.get("depotIds");
-        List<String> depotIdList = Collections.singletonList(depotIds);
-        // TODO mysql可能存在bug，无法进行正常的查询，模糊查询超过一定长度就无法执行
+        // 将字符串分割成数组
+        String[] strings = depotIds.split(",");
+        // 将数组转换成集合
+        List<String> toList = Arrays.asList(strings);
+        // 去重
+        List<String> depotIdList = CommonUtils.delRepeatWithJava8(toList);
         List<DepotHeadVo4List> list = depotHeadMapper.selectByConditionDeportHead(type, subType, number,
-                beginTime, endTime, materialParam, depotIdList, currentPage, pageSize);
+                beginTime, endTime, materialParam, depotIdList, offSet, pageSize);
 
         List<DepotHeadVo4List> resList = new ArrayList<>();
         // 一些需要单独处理的字段
