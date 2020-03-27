@@ -1,13 +1,16 @@
 package com.jshlearn.smicerp.controller;
 
+import com.jshlearn.smicerp.constants.PageConstants;
 import com.jshlearn.smicerp.pojo.Role;
 import com.jshlearn.smicerp.service.RoleService;
+import com.jshlearn.smicerp.utils.ErpCustomUtils;
+import com.jshlearn.smicerp.utils.ResultBean;
+import com.jshlearn.smicerp.utils.ResultBeanUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,5 +45,15 @@ public class RoleController {
         mapList.add(map);
         mapList.forEach(System.out::println);
         return mapList;
+    }
+
+    @GetMapping("/list")
+    public ResultBean<Map<String,Object>> showRoleDetails(@RequestParam(PageConstants.SEARCH) String search,
+                                                          @RequestParam(PageConstants.CURRENT_PAGE) Integer currentPage,
+                                                          @RequestParam(PageConstants.PAGE_SIZE) Integer pageSize,
+                                                          HttpServletRequest request){
+        Role role = (Role) ErpCustomUtils.getClassObject(search, Role.class);
+        Map<String,Object> pageRecords = roleService.selectPage(role,currentPage,pageSize);
+        return ResultBeanUtil.success(pageRecords);
     }
 }

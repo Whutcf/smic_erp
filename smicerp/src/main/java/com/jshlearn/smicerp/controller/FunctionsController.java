@@ -2,6 +2,7 @@ package com.jshlearn.smicerp.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jshlearn.smicerp.constants.BusinessConstants;
 import com.jshlearn.smicerp.pojo.Functions;
 import com.jshlearn.smicerp.pojo.User;
 import com.jshlearn.smicerp.service.FunctionsService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -76,8 +78,8 @@ public class FunctionsController {
                     parentItem.put("children", jsonFirstChildrenArray);
                 } else {
                     // 没有子菜单，父菜单直接跳转
-                    if (null != parentFunctions.getUrl()){
-                        parentItem.put("url",parentFunctions.getUrl());
+                    if (null != parentFunctions.getUrl()) {
+                        parentItem.put("url", parentFunctions.getUrl());
                     }
                 }
                 jsonParentArray.add(parentItem);
@@ -88,6 +90,41 @@ public class FunctionsController {
             return null;
         }
         return jsonParentArray;
+    }
+
+
+    /**
+     * 角色对应功能显示
+     *
+     * @param type    功能列表适配的类型 ex. 电脑、手机
+     * @param keyId   角色id
+     * @param request 请求
+     * @return com.alibaba.fastjson.JSONArray
+     * @author 蔡明涛
+     * @date 2020/3/25 22:12
+     */
+    @PostMapping("/findRoleFunctions")
+    public JSONArray findRoleFunctions(@RequestParam("UBType") String type, @RequestParam("UBKeyId") String keyId,
+                                       HttpServletRequest request) {
+        JSONArray jsonArray = new JSONArray();
+        // 获取当前所有功能列表
+        List<Functions> functionsList = functionsService.getRoleFunctions(BusinessConstants.FUNCTIONS_PARENTS_P_NUMBER);
+
+        // 开始拼接json数据
+        JSONObject outer = new JSONObject();
+        outer.put("id",1);
+        outer.put("text","功能列表");
+        outer.put("state","open");
+        // 存放json数组
+        JSONArray dataArray = new JSONArray();
+        if (null != functionsList){
+            // 根据条件从列表中剔除"系统管理"
+            List<Functions> dataList = new ArrayList<>();
+            // TODO: 2020/3/25
+        }
+
+
+        return jsonArray;
     }
 
 }

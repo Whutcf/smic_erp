@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Description 角色表
  * @ClassName Role
@@ -11,7 +13,8 @@ import lombok.Data;
  * @Date 2020/3/7 12:53
  **/
 @Data
-public class Role {
+public class Role implements Serializable {
+    private static final long serialVersionUID = 2750490302468599080L;
     @TableId(value = "id",type = IdType.AUTO)
     private Long id;
     /**
