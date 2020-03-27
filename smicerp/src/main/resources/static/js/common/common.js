@@ -367,7 +367,7 @@
     function checkPower() {
     	var res = false;
         var loginName = sessionStorage.getItem("loginName");
-        if(loginName == "admin") {
+        if(loginName === "admin") {
             $.messager.alert('提示','管理员不能增加表单数据！','warning');
             res = true;
         } else {

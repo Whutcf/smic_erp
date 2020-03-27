@@ -382,22 +382,22 @@
     });
 
     function showRoleDetails(pageNo, pageSize) {
-        var searchName = $.trim($("#searchName").val());
+        var name = $.trim($("#searchName").val());
         $.ajax({
             type: "get",
             url: "/role/list",
             dataType: "json",
             data: ({
                 search: JSON.stringify({
-                    name: searchName
+                    name: name
                 }),
                 currentPage: pageNo,
                 pageSize: pageSize
             }),
             success: function (res) {
                 if(res && res.code === 200){
-                    if(res.data && res.data.page) {
-                        $("#tableData").datagrid('loadData', res.data.page);
+                    if(res.data) {
+                        $("#tableData").datagrid('loadData', res.data);
                     }
                 }
             },

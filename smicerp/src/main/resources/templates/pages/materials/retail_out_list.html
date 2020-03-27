@@ -62,7 +62,7 @@
                 <td style="width:70px;height:50px;">会员卡号：</td>
                 <td style="padding:5px;width:200px;">
                     <div class="org-list">
-                        <input id="OrgId" name="OrgId" style="width:130px;"/>
+                        <input id="orgId" name="orgId" style="width:130px;"/>
                     </div>
                     <div class="add-org-btn">
                         <img id="addMember" src="/js/easyui-1.3.5/themes/icons/edit_add.png"
@@ -71,13 +71,13 @@
                 </td>
                 <td style="width:70px;">单据日期：</td>
                 <td style="padding:5px">
-                    <input type="text" name="OperTime" id="OperTime"
+                    <input type="text" name="operTime" id="operTime"
                            onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="txt Wdate"
                            style="width: 140px;" readonly/>
                 </td>
                 <td style="width:80px;">单据编号：</td>
                 <td style="padding:5px">
-                    <input name="Number" id="Number" class="easyui-validatebox"
+                    <input name="number" id="number" class="easyui-validatebox"
                            data-options="required:true,validType:'length[2,30]'" style="width: 150px;" readonly/>
                 </td>
                 <td style="width:70px;">付款类型：</td>
@@ -99,8 +99,8 @@
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <input id="ChangeAmount" name="ChangeAmount" class="change-amount" readonly="readonly"
-                                       data-changeamount="0"/>
+                                <input id="changeAmount" name="changeAmount" class="change-amount" readonly="readonly"
+                                       data-changeAmount="0"/>
                             </td>
                         </tr>
                         <tr>
@@ -110,7 +110,7 @@
                             <td colspan="2">
                                 <input id="getAmount" name="getAmount"
                                        onKeypress="return (/[\d.]/.test(String.fromCharCode(event.keyCode)))"
-                                       class="get-amount" data-changeamount="0"/>
+                                       class="get-amount" data-changeAmount="0"/>
                             </td>
                         </tr>
                         <tr>
@@ -119,13 +119,13 @@
                         <tr>
                             <td colspan="2">
                                 <input id="backAmount" name="backAmount" class="back-amount" readonly="readonly"
-                                       data-changeamount="0"/>
+                                       data-changeAmount="0"/>
                             </td>
                         </tr>
                         <tr>
                             <td>收款账户：</td>
                             <td>
-                                <select name="AccountId" id="AccountId" style="width:110px;"></select>
+                                <select name="accountId" id="accountId" style="width:110px;"></select>
                                 <img class="many-account-ico" src="/js/easyui-1.3.5/themes/icons/filelist.jpg"
                                      style="display: none;"/>
                             </td>
@@ -135,7 +135,7 @@
             </tr>
             <tr>
                 <td colspan="8">
-                    <textarea name="Remark" id="Remark" rows="2" cols="2" placeholder="暂无备注信息"
+                    <textarea name="remark" id="remark" rows="2" cols="2" placeholder="暂无备注信息"
                               style="width: 1130px; height:35px;"></textarea>
                 </td>
             </tr>
@@ -154,15 +154,15 @@
         <tr>
             <td style="width:60px;height:50px;">会员卡号：</td>
             <td style="padding:5px;width:200px;">
-                <span id="OrgIdShow"></span>
+                <span id="orgIdShow"></span>
             </td>
             <td style="width:70px;">单据日期：</td>
             <td style="padding:5px;width:200px;">
-                <span id="OperTimeShow"></span>
+                <span id="operTimeShow"></span>
             </td>
             <td style="width:80px;">单据编号：</td>
             <td style="padding:5px;width:200px;">
-                <span id="NumberShow"></span>
+                <span id="numberShow"></span>
             </td>
             <td style="width:70px;">付款类型：</td>
             <td style="padding:5px;width:150px;">
@@ -181,7 +181,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <span id="ChangeAmountShow" class="change-amount-show"></span>
+                            <span id="changeAmountShow" class="change-amount-show"></span>
                         </td>
                     </tr>
                     <tr>
@@ -203,7 +203,7 @@
                     <tr>
                         <td>收款账户：</td>
                         <td align="left" style="width:110px;">
-                            <span id="AccountIdShow"></span>
+                            <span id="accountIdShow"></span>
                         </td>
                     </tr>
                 </table>
@@ -211,7 +211,7 @@
         </tr>
         <tr>
             <td colspan="8" style="width: 1130px; height:35px;">
-                <span id="RemarkShow"></span>
+                <span id="remarkShow"></span>
             </td>
         </tr>
     </table>

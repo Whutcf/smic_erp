@@ -6,7 +6,7 @@
 	var userBusinessList=null;
 	var UserDepot=null;
 	var url;
-	var depotHeadID = 0;
+	var depotHeadId = 0;
 	var preTotalPrice = 0; //前一次加载的金额
 	var orgDepotHead = "";
 	var editIndex = undefined;
@@ -327,11 +327,12 @@
             }),
 			success: function (res) {
                 if(res && res.code === 200){
-                    if(res.data && res.data.page) {
-                        var thisRows = res.data.page.rows;
+                    if(res.data) {
+                        var thisRows = res.data.rows;
                         for (var i = 0; i < thisRows.length; i++) {
                             if (thisRows[i].enabled) {
-                                mPropertyList += thisRows[i].nativename + ",";
+                                mPropertyList += thisRows[i].nativeName + ",";
+                                // console.log(mPropertyList)
                             }
                         }
                         if (mPropertyList) {
@@ -518,7 +519,7 @@
 				{ title: '单据日期',field: 'operTime',width:130},
 				{ title: '操作员',field: 'operPersonName',width:60},
 				{ title: '金额合计',field: 'totalPrice',width:60},
-				{ title: '含税合计',field: 'totaltaxlastmoney',hidden:isShowLastMoneyColumn,width:60,formatter:function(value,rec){
+				{ title: '含税合计',field: 'totalTaxLastMoney',hidden:isShowLastMoneyColumn,width:60,formatter:function(value,rec){
 						return (rec.discountMoney + rec.discountLastMoney).toFixed(2);
 					}
 				},
@@ -617,12 +618,12 @@
                                         }
                                     }
                                     thisStock = (thisStock / loadRatio).toFixed(2);
-									body.find("[field='Stock']").find(input).val(thisStock).attr("data-stock", thisStock); //加载库存数据
+									body.find("[field='stock']").find(input).val(thisStock).attr("data-stock", thisStock); //加载库存数据
                                 }
                                 else {
-                                    body.find("[field='Stock']").find(input).val(0).attr("data-stock", 0); //加载库存数据
+                                    body.find("[field='stock']").find(input).val(0).attr("data-stock", 0); //加载库存数据
                                 }
-                                body.find("[field='Stock']").find(input).prop("readonly", "readonly"); //设置库存数据为只读
+                                body.find("[field='stock']").find(input).prop("readonly", "readonly"); //设置库存数据为只读
                             }
 						},
 						error:function() {
@@ -637,25 +638,25 @@
 		});
 	}
 	//优惠率、合计的统计方法
-	function statisticsFun(body,UnitPrice,OperNumber,footer,taxRate){
+	function statisticsFun(body,unitPrice,operNumber,footer,taxRate){
 		var totalPrice = 0;
 		var taxLastMoneyTotal = 0;
 		//金额的合计
-		body.find("[field='AllPrice']").each(function(){
+		body.find("[field='allPrice']").each(function(){
 			if($(this).find("div").text()!==""){
 				totalPrice = totalPrice + parseFloat($(this).find("div").text().toString());
 			}
 		});
-		totalPrice = totalPrice + UnitPrice*OperNumber;
-		footer.find("[field='AllPrice']").find("div").text((totalPrice).toFixed(2)); //金额的合计
+		totalPrice = totalPrice + unitPrice*operNumber;
+		footer.find("[field='allPrice']").find("div").text((totalPrice).toFixed(2)); //金额的合计
 		//价税合计的总计
-		body.find("[field='TaxLastMoney']").each(function(){
+		body.find("[field='taxLastMoney']").each(function(){
 			if($(this).find("div").text()!==""){
 				taxLastMoneyTotal = taxLastMoneyTotal + (parseFloat($(this).find("div").text().toString())-0);
 			}
 		});
-		taxLastMoneyTotal = taxLastMoneyTotal + (UnitPrice*OperNumber*(1+taxRate/100));
-		footer.find("[field='TaxLastMoney']").find("div").text((taxLastMoneyTotal).toFixed(2)); //价税合计的页脚总计
+		taxLastMoneyTotal = taxLastMoneyTotal + (unitPrice*operNumber*(1+taxRate/100));
+		footer.find("[field='taxLastMoney']").find("div").text((taxLastMoneyTotal).toFixed(2)); //价税合计的页脚总计
 		var discount = $("#discount").val(); //优惠率
 		var discountMoney = (taxLastMoneyTotal*discount/100).toFixed(2);
 		$("#discountMoney").val(discountMoney);//优惠金额
@@ -720,11 +721,11 @@
 			onClickRow: onClickRow,
 			columns:[
 				[
-			  	{ field: 'Id',width:35,align:"center",checkbox:true},
-				{ title: '商品类型',field: 'MType',editor:'validatebox',hidden:isShowMaterialTypeColumn,width:80},
-				{ title: depotHeadName, field: 'DepotId', editor: 'validatebox', width: 90,
+			  	{ field: 'id',width:35,align:"center",checkbox:true},
+				{ title: '商品类型',field: 'mType',editor:'validatebox',hidden:isShowMaterialTypeColumn,width:80},
+				{ title: depotHeadName, field: 'depotId', editor: 'validatebox', width: 90,
 					formatter: function (value, row, index) {
-						return row.DepotName;
+						return row.depotName;
 					},
 					editor: {
 						type: 'combobox',
@@ -738,7 +739,7 @@
 								body =$("#depotHeadFM .datagrid-body");
 								footer =$("#depotHeadFM .datagrid-footer");
 								input = ".datagrid-editable-input";
-								var mId = body.find("[field='MaterialId']").find(".combo-value").val();
+								var mId = body.find("[field='materialId']").find(".combo-value").val();
 								if(mId){
 									var type = "select"; //type 类型：点击 click，选择 select
 									findStockNumById(depotId, mId, monthTime, body, input, ratioDepot, type);
@@ -747,15 +748,15 @@
 						}
 					}
 				},
-	          	{ title: '品名(型号)(扩展信息)(单位)',field: 'MaterialId',width:230,
+	          	{ title: '品名(型号)(扩展信息)(单位)',field: 'materialId',width:230,
 				  	formatter:function(value,row,index){
-						return row.MaterialName;
+						return row.materialName;
 	              	},
 				  	editor:{
 	                  	type:'combobox',
 	                  	options:{
 	                      	valueField:'Id',
-	                      	textField:'MaterialName',
+	                      	textField:'materialName',
 	                      	method:'get',
 	                      	url: "/material/findBySelect",
 							panelWidth: 300, //下拉框的宽度
@@ -773,7 +774,7 @@
 	                  	}
 		            }
 			    },
-				{ title: '库存',field: 'Stock',editor:'validatebox',width:70},
+				{ title: '库存',field: 'stock',editor:'validatebox',width:70},
 				{ title: anotherDepotHeadName, field: 'anotherDepotId',editor:'validatebox',hidden:isShowAnotherDepot,width:90,
 					formatter: function (value, row, index) {
 						return row.anotherDepotName;
@@ -788,20 +789,20 @@
 						}
 					}
 				},
-				{ title: '单位',field: 'Unit',editor:'validatebox',width:60},
-	            { title: '数量',field: 'OperNumber',editor:'validatebox',width:60},
-	            { title: '单价',field: 'UnitPrice',editor:'validatebox',width:60},
-				{ title: '含税单价',field: 'TaxUnitPrice',editor:'validatebox',hidden:isShowTaxColumn,width:75},
-	            { title: '金额',field: 'AllPrice',editor:'validatebox',width:75},
-				{ title: '税率(%)',field: 'TaxRate',editor:'validatebox',hidden:isShowTaxColumn,width:75},
-				{ title: '税额',field: 'TaxMoney',editor:'validatebox',hidden:isShowTaxColumn,width:75},
-				{ title: '价税合计',field: 'TaxLastMoney',editor:'validatebox',hidden:isShowTaxColumn,width:75},
+				{ title: '单位',field: 'unit',editor:'validatebox',width:60},
+	            { title: '数量',field: 'operNumber',editor:'validatebox',width:60},
+	            { title: '单价',field: 'unitPrice',editor:'validatebox',width:60},
+				{ title: '含税单价',field: 'taxUnitPrice',editor:'validatebox',hidden:isShowTaxColumn,width:75},
+	            { title: '金额',field: 'allPrice',editor:'validatebox',width:75},
+				{ title: '税率(%)',field: 'taxRate',editor:'validatebox',hidden:isShowTaxColumn,width:75},
+				{ title: '税额',field: 'taxMoney',editor:'validatebox',hidden:isShowTaxColumn,width:75},
+				{ title: '价税合计',field: 'taxLastMoney',editor:'validatebox',hidden:isShowTaxColumn,width:75},
 	            { title: '备注',field: 'remark',editor:'validatebox',width:120},
-				{ title: '品名-别',field: 'OtherField1',editor:'validatebox',hidden:otherColumns,width:60},
+				{ title: '品名-别',field: 'otherField1',editor:'validatebox',hidden:otherColumns,width:60},
 				{ title: '型号-别',field: 'OtherField2',editor:'validatebox',hidden:otherColumns,width:60},
-				{ title: '颜色-别',field: 'OtherField3',editor:'validatebox',hidden:otherColumns,width:60},
-				{ title: '备注1',field: 'OtherField4',editor:'validatebox',hidden:true,width:60},
-				{ title: '备注2',field: 'OtherField5',editor:'validatebox',hidden:true,width:60}
+				{ title: '颜色-别',field: 'otherField3',editor:'validatebox',hidden:otherColumns,width:60},
+				{ title: '备注1',field: 'otherField4',editor:'validatebox',hidden:true,width:60},
+				{ title: '备注2',field: 'otherField5',editor:'validatebox',hidden:true,width:60}
 			]
 			],
 			toolbar:[
@@ -857,25 +858,25 @@
 			type:"get",
 			url: '/depotItem/getDetailList',
 			data: {
-                headerId: depotHeadID,
+                headerId: depotHeadId,
 				mpList: mPropertyList
 			},
 			dataType: "json",
 			success: function (res) {
 				if(res && res.code === 200) {
 					var data = res.data;
-                    var AllPrice = 0;
-                    var TaxLastMoney = 0;
+                    var allPrice = 0;
+                    var taxLastMoney = 0;
                     var discountMoney = $("#discountMoney").val()-0; //优惠金额
                     var discountLastMoney = $("#discountLastMoney").val()-0; //优惠后金额
                     if(type === "edit") {
-                        AllPrice = totalPrice;
-                        TaxLastMoney = discountMoney + discountLastMoney;
+                        allPrice = totalPrice;
+                        taxLastMoney = discountMoney + discountLastMoney;
                     }
                     var array = [];
                     array.push({
-                        "AllPrice": AllPrice,
-                        "TaxLastMoney": TaxLastMoney
+                        "allPrice": allPrice,
+                        "taxLastMoney": taxLastMoney
                     });
                     data.footer = array;
                     $("#materialData").datagrid('loadData',data);
@@ -932,18 +933,18 @@
                                 otherPresetPriceOne = psObj[1].other.PresetPriceOne-0;
                                 otherPresetPriceTwo = psObj[1].other.PresetPriceTwo-0;
                                 retailPriceTwo = psObj[1].other.RetailPrice-0;
-                                basicUnit = psObj[0].basic.Unit;
-                                otherUnit = psObj[1].other.Unit;
+                                basicUnit = psObj[0].basic.unit;
+                                otherUnit = psObj[1].other.unit;
                             }
                             body =$("#depotHeadFM .datagrid-body");
                             footer =$("#depotHeadFM .datagrid-footer");
                             input = ".datagrid-editable-input";
                             if(res.data[0].unit){ //如果存在计量单位信息
                                 ratio = 1; //重置比例为1
-                                body.find("[field='Unit']").find(input).val(res.data[0].unit); //设置-计量单位信息
-                                body.find("[field='Unit']").find(input).prop("readonly","readonly"); //设置计量单位为只读
-                                body.find("[field='Unit']").find(input).off("click"); //移除点击事件
-                                body.find("[field='Unit']").find(input).attr("data-ratio",ratio); //修改比例缓存信息
+                                body.find("[field='unit']").find(input).val(res.data[0].unit); //设置-计量单位信息
+                                body.find("[field='unit']").find(input).prop("readonly","readonly"); //设置计量单位为只读
+                                body.find("[field='unit']").find(input).off("click"); //移除点击事件
+                                body.find("[field='unit']").find(input).attr("data-ratio",ratio); //修改比例缓存信息
                             }
                             else {
                                 var unitName = res.data[0].unitName;
@@ -955,7 +956,7 @@
                                 var basicUnit = unitArr[0]; //基础单位
                                 var otherUnit = unitArr[1]; //副单位
                                 var unitSetInput =""; //单位
-                                body.find("[field='Unit']").find(input).prop("readonly","readonly"); //设置计量单位为只读
+                                body.find("[field='unit']").find(input).prop("readonly","readonly"); //设置计量单位为只读
                                 var loadRatio = 1; //在单位输入框上面加载比例字段
                                 if(listSubType === "采购" || listSubType === "采购退货" || listSubType === "采购订单"){
                                     unitSetInput = res.data[0].firstinunit; //给单位文本框赋值
@@ -975,9 +976,9 @@
                                         loadRatio = ratio;
                                     }
                                 }
-                                body.find("[field='Unit']").find(input).val(unitSetInput).attr("data-ratio", loadRatio); //设置-首选单位
+                                body.find("[field='unit']").find(input).val(unitSetInput).attr("data-ratio", loadRatio); //设置-首选单位
 
-                                body.find("[field='Unit']").find(input).off("click").on("click",function(){
+                                body.find("[field='unit']").find(input).off("click").on("click",function(){
                                     if(basicUnit && otherUnit) {
                                         var self = this;
                                         //定义模版
@@ -1000,47 +1001,47 @@
                                             $(self).val(unit).attr("data-ratio", thisRatio);
                                             $(self).keyup(); //模拟键盘操作
                                             $('.unit-list').remove(); //移除计量单位列表
-                                            var stock = body.find("[field='Stock']").find(input).attr("data-stock"); //从缓存中取值
+                                            var stock = body.find("[field='stock']").find(input).attr("data-stock"); //从缓存中取值
                                             var type = $(this).attr("data-type");
-                                            var UnitPrice = 0;
+                                            var unitPrice = 0;
                                             if(type === "basic"){
                                                 if(listTitle === "采购订单列表" || listTitle === "采购入库列表" || listTitle === "销售退货列表" || listTitle === "其它入库列表") {
-                                                    UnitPrice = basicPresetPriceOne;
+                                                    unitPrice = basicPresetPriceOne;
                                                     loadRatio = ratio;
                                                 }
                                                 else if(listTitle === "销售订单列表" || listTitle === "销售出库列表" || listTitle === "采购退货列表" || listTitle === "其它出库列表" || listTitle === "调拨出库列表") {
-                                                    UnitPrice = basicPresetPriceTwo;
+                                                    unitPrice = basicPresetPriceTwo;
                                                     loadRatio = 1;
                                                 }
                                                 else if(listTitle === "零售出库列表" || listTitle === "零售退货列表"){
-                                                    UnitPrice = retailPriceOne;
+                                                    unitPrice = retailPriceOne;
                                                     loadRatio = 1;
                                                 }
-                                                body.find("[field='Stock']").find(input).val(stock*loadRatio); //修改库存
+                                                body.find("[field='stock']").find(input).val(stock*loadRatio); //修改库存
                                             }
                                             else if(type === "other"){
                                                 if(listTitle === "采购订单列表" || listTitle === "采购入库列表" || listTitle === "销售退货列表" || listTitle === "其它入库列表") {
-                                                    UnitPrice = otherPresetPriceOne;
+                                                    unitPrice = otherPresetPriceOne;
                                                     loadRatio = 1;
                                                 }
                                                 else if(listTitle === "销售订单列表" || listTitle === "销售出库列表" || listTitle === "采购退货列表" || listTitle === "其它出库列表" || listTitle === "调拨出库列表") {
-                                                    UnitPrice = otherPresetPriceTwo;
+                                                    unitPrice = otherPresetPriceTwo;
                                                     loadRatio = ratio;
                                                 }
                                                 else if(listTitle === "零售出库列表" || listTitle === "零售退货列表"){
-                                                    UnitPrice = retailPriceTwo;
+                                                    unitPrice = retailPriceTwo;
                                                     loadRatio = ratio;
                                                 }
-                                                body.find("[field='Stock']").find(input).val((stock/loadRatio).toFixed(2)); //修改库存
+                                                body.find("[field='stock']").find(input).val((stock/loadRatio).toFixed(2)); //修改库存
                                             }
-                                            body.find("[field='UnitPrice']").find(input).val(UnitPrice); //单价
-                                            var OperNumber = body.find("[field='OperNumber']").find(input).val(); //获取数量
-                                            var taxRate = body.find("[field='TaxRate']").find(input).val(); //获取税率
-                                            body.find("[field='TaxUnitPrice']").find(input).val((UnitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
-                                            body.find("[field='AllPrice']").find(input).val((UnitPrice*OperNumber).toFixed(2)); //金额
-                                            body.find("[field='TaxMoney']").find(input).val((UnitPrice*OperNumber*(taxRate/100)).toFixed(2)); //税额
-                                            body.find("[field='TaxLastMoney']").find(input).val((UnitPrice*OperNumber*(1+taxRate/100)).toFixed(2)); //价税合计
-                                            statisticsFun(body,UnitPrice,OperNumber,footer,taxRate);
+                                            body.find("[field='unitPrice']").find(input).val(unitPrice); //单价
+                                            var operNumber = body.find("[field='operNumber']").find(input).val(); //获取数量
+                                            var taxRate = body.find("[field='taxRate']").find(input).val(); //获取税率
+                                            body.find("[field='taxUnitPrice']").find(input).val((unitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
+                                            body.find("[field='allPrice']").find(input).val((unitPrice*operNumber).toFixed(2)); //金额
+                                            body.find("[field='taxMoney']").find(input).val((unitPrice*operNumber*(taxRate/100)).toFixed(2)); //税额
+                                            body.find("[field='taxLastMoney']").find(input).val((unitPrice*operNumber*(1+taxRate/100)).toFixed(2)); //价税合计
+                                            statisticsFun(body,unitPrice,operNumber,footer,taxRate);
                                         });
                                         //点击空白处移除计量单位列表
                                         $(".datagrid-body").off("click").on("click",function(){
@@ -1089,21 +1090,21 @@
                                     }
                                 }
                             }
-                            body.find("[field='OperNumber']").find(input).val(1); //数量初始化为1
+                            body.find("[field='operNumber']").find(input).val(1); //数量初始化为1
                             //单价和总价赋值
                             if(!detailPrice) {
                                 detailPrice = 0;
                             }
-                            body.find("[field='UnitPrice']").find(input).val(detailPrice);
-                            body.find("[field='AllPrice']").find(input).val(detailPrice);
-                            var taxRate = body.find("[field='TaxRate']").find(input).val()-0; //获取税率
-                            body.find("[field='TaxUnitPrice']").find(input).val((detailPrice*(1+taxRate/100)).toFixed(2));  //含税单价
-                            body.find("[field='TaxMoney']").find(input).val((detailPrice*(taxRate/100)).toFixed(2));  //税额
-                            body.find("[field='TaxLastMoney']").find(input).val((detailPrice*(1+taxRate/100)).toFixed(2));  //价税合计
+                            body.find("[field='unitPrice']").find(input).val(detailPrice);
+                            body.find("[field='allPrice']").find(input).val(detailPrice);
+                            var taxRate = body.find("[field='taxRate']").find(input).val()-0; //获取税率
+                            body.find("[field='taxUnitPrice']").find(input).val((detailPrice*(1+taxRate/100)).toFixed(2));  //含税单价
+                            body.find("[field='taxMoney']").find(input).val((detailPrice*(taxRate/100)).toFixed(2));  //税额
+                            body.find("[field='taxLastMoney']").find(input).val((detailPrice*(1+taxRate/100)).toFixed(2));  //价税合计
                             statisticsFun(body,detailPrice,1,footer,taxRate);
 
                             //查询库存信息
-                            var depotId = body.find("[field='DepotId']").find(".combo-value").val();
+                            var depotId = body.find("[field='depotId']").find(".combo-value").val();
                             if(depotId) {
                                 var type = "select"; //type 类型：点击 click，选择 select
                                 findStockNumById(depotId, mId, monthTime, body, input, loadRatio, type);
@@ -1155,26 +1156,26 @@
 			onClickRow: onClickRow,
 			columns:[
 				[
-				{ title: '商品类型',field: 'MType',width:80, hidden:isShowMaterialTypeColumn},
-				{ title: depotHeadName,field: 'DepotName',editor:'validatebox',width:90},
-				{ title: '品名(型号)(扩展信息)(单位)',field: 'MaterialName',width:230},
-                { title: '库存',field: 'Stock',width:70},
-				{ title: anotherDepotHeadName,field: 'AnotherDepotName',hidden:isShowAnotherDepot,width:90},
-				{ title: '单位',field: 'Unit',editor:'validatebox',width:60},
-				{ title: '数量',field: 'OperNumber',editor:'validatebox',width:60},
+				{ title: '商品类型',field: 'mType',width:80, hidden:isShowMaterialTypeColumn},
+				{ title: depotHeadName,field: 'depotName',editor:'validatebox',width:90},
+				{ title: '品名(型号)(扩展信息)(单位)',field: 'materialName',width:230},
+                { title: '库存',field: 'stock',width:70},
+				{ title: anotherDepotHeadName,field: 'anotherDepotName',hidden:isShowAnotherDepot,width:90},
+				{ title: '单位',field: 'unit',editor:'validatebox',width:60},
+				{ title: '数量',field: 'operNumber',editor:'validatebox',width:60},
                 { title: '分批数量',field: 'finishNumber',editor:'validatebox',hidden:isShowFinishColumn,width:60},
-				{ title: '单价',field: 'UnitPrice',editor:'validatebox',width:60},
-				{ title: '含税单价',field: 'TaxUnitPrice',editor:'validattebox',hidden:isShowTaxColumn,width:75},
-				{ title: '金额',field: 'AllPrice',editor:'validatebox',width:75},
-				{ title: '税率',field: 'TaxRate',editor:'validatebox',hidden:isShowTaxColumn,width:75},
-				{ title: '税额',field: 'TaxMoney',editor:'validatebox',hidden:isShowTaxColumn,width:75},
-				{ title: '价税合计',field: 'TaxLastMoney',editor:'validatebox',hidden:isShowTaxColumn,width:75},
+				{ title: '单价',field: 'unitPrice',editor:'validatebox',width:60},
+				{ title: '含税单价',field: 'taxUnitPrice',editor:'validattebox',hidden:isShowTaxColumn,width:75},
+				{ title: '金额',field: 'allPrice',editor:'validatebox',width:75},
+				{ title: '税率',field: 'taxRate',editor:'validatebox',hidden:isShowTaxColumn,width:75},
+				{ title: '税额',field: 'taxMoney',editor:'validatebox',hidden:isShowTaxColumn,width:75},
+				{ title: '价税合计',field: 'taxLastMoney',editor:'validatebox',hidden:isShowTaxColumn,width:75},
 				{ title: '备注',field: 'remark',editor:'validatebox',width:120},
-				{ title: '品名-别',field: 'OtherField1',editor:'validatebox',hidden:otherColumns,width:60},
-				{ title: '型号-别',field: 'OtherField2',editor:'validatebox',hidden:otherColumns,width:60},
-				{ title: '颜色-别',field: 'OtherField3',editor:'validatebox',hidden:otherColumns,width:60},
-				{ title: '备注1',field: 'OtherField4',editor:'validatebox',hidden:true,width:60},
-				{ title: '备注2',field: 'OtherField5',editor:'validatebox',hidden:true,width:60}
+				{ title: '品名-别',field: 'otherField1',editor:'validatebox',hidden:otherColumns,width:60},
+				{ title: '型号-别',field: 'otherField2',editor:'validatebox',hidden:otherColumns,width:60},
+				{ title: '颜色-别',field: 'otherField3',editor:'validatebox',hidden:otherColumns,width:60},
+				{ title: '备注1',field: 'otherField4',editor:'validatebox',hidden:true,width:60},
+				{ title: '备注2',field: 'otherField5',editor:'validatebox',hidden:true,width:60}
 			]
 			],
 			onLoadError:function() {
@@ -1186,20 +1187,20 @@
 			type:"get",
 			url: '/depotItem/getDetailList',
 			data: {
-                headerId: depotHeadID,
+                headerId: depotHeadId,
                 mpList: mPropertyList
 			},
 			dataType: "json",
 			success: function (res) {
                 if(res && res.code === 200) {
                     var data = res.data;
-                    var AllPrice = totalPrice;
-                    var discountMoney = $("#DiscountMoneyShow").text() - 0; //优惠金额
-                    var discountLastMoney = $("#DiscountLastMoneyShow").text() - 0; //优惠后金额
+                    var allPrice = totalPrice;
+                    var discountMoney = $("#discountMoneyShow").text() - 0; //优惠金额
+                    var discountLastMoney = $("#discountLastMoneyShow").text() - 0; //优惠后金额
                     var array = [];
                     array.push({
-                        "AllPrice": AllPrice,
-                        "TaxLastMoney": discountMoney + discountLastMoney
+                        "allPrice": allPrice,
+                        "taxLastMoney": discountMoney + discountLastMoney
                     });
                     data.footer = array;
                     $("#materialDataShow").datagrid('loadData', data);
@@ -1232,7 +1233,7 @@
 		}
 	}
 	//删除单据信息
-	function deleteDepotHead(depotHeadID, thisOrgId, totalPrice, status){
+	function deleteDepotHead(depotHeadId, thisOrgId, totalPrice, status){
 		if(status === "1" || status === "2") {
 			$.messager.alert('删除提示','已审核和已转的单据不能删除！','warning');
 			return;
@@ -1244,7 +1245,7 @@
                     url: "/depotHead/deleteDepotHeadAndDetail",
 					dataType: "json",
 					data:{
-						id: depotHeadID
+						id: depotHeadId
 					},
                     success: function (res) {
                         if(res && res.code === 200) {
@@ -1462,7 +1463,7 @@
 		$(".window-mask").css({ width: webW ,height: webH});
 
 	    orgDepotHead = "";
-	    depotHeadID = 0;
+	    depotHeadId = 0;
 	    initTableData_material("add"); //商品列表
 	    reject(); //撤销下、刷新商品列表
 		function supplierDlgFun(type) {
@@ -1572,7 +1573,7 @@
 	    var editTitle = listTitle.replace("列表","信息");
 	    $('#depotHeadDlg').show().dialog('open').dialog('setTitle','<img src="/js/easyui-1.3.5/themes/icons/pencil.png"/>&nbsp;编辑' + editTitle);
 	    $(".window-mask").css({ width: webW ,height: webH});
-	    depotHeadID = res.id;
+	    depotHeadId = res.id;
 
 		if(listSubType === "零售"){
 			var option = "";
@@ -1640,7 +1641,7 @@
 		if(pageType === "skip") {
             url = '/depotHead/addDepotHeadAndDetail'; //如果是从订单跳转过来，则此处为新增的接口
 			//jshjshjsh
-            $("#depotHeadFM .datagrid-body").find("[field='DepotId']").click();
+            $("#depotHeadFM .datagrid-body").find("[field='depotId']").click();
 		} else {
             url = '/depotHead/updateDepotHeadAndDetail?id=' + res.id; //更新接口
 		}
@@ -1649,13 +1650,13 @@
 	function showDepotHead(index){
         var res = $("#tableData").datagrid("getRows")[index];
 		var manyAccountMoney = 0; //多账户合计-零售
-	    $("#ProjectIdShow").text(res.projectName);
-	    $("#NumberShow").text(res.number);
-	    $("#OperTimeShow").text(res.operTime);
-	    $('#OrgIdShow').text(res.orgName);
-	    $("#HandsPersonIdShow").text(res.handsPersonName);
+	    $("#projectIdShow").text(res.projectName);
+	    $("#numberShow").text(res.number);
+	    $("#operTimeShow").text(res.operTime);
+	    $('#orgIdShow').text(res.orgName);
+	    $("#handsPersonIdShow").text(res.handsPersonName);
         if(res.accountName){
-            $("#AccountIdShow").text(res.accountName); //结算账户
+            $("#accountIdShow").text(res.accountName); //结算账户
         } else {
             if (res.accountIdList) {
                 var accountArr = res.accountIdList.split(","); //账户id列表
@@ -1676,17 +1677,17 @@
                         }
                     }
                 }
-                $("#AccountIdShow").text(accountIdShow);
+                $("#accountIdShow").text(accountIdShow);
             }
         }
-	    $("#ChangeAmountShow").text(res.changeAmount);
-	    $("#RemarkShow").text(res.remark);
-		$("#DiscountShow").text(res.discount);
-		$("#DiscountMoneyShow").text(res.discountMoney);
-		$("#DiscountLastMoneyShow").text(res.discountLastMoney);
-		$("#DebtShow").text((res.discountLastMoney-res.changeAmount).toFixed(2));
-		$("#AccountDayShow").text(res.accountDay);  //结算天数
-		$("#LinkNumberShow").text(res.linkNumber); //关联订单号
+	    $("#changeAmountShow").text(res.changeAmount);
+	    $("#remarkShow").text(res.remark);
+		$("#discountShow").text(res.discount);
+		$("#discountMoneyShow").text(res.discountMoney);
+		$("#discountLastMoneyShow").text(res.discountLastMoney);
+		$("#debtShow").text((res.discountLastMoney-res.changeAmount).toFixed(2));
+		$("#accountDayShow").text(res.accountDay);  //结算天数
+		$("#linkNumberShow").text(res.linkNumber); //关联订单号
         if(res.otherMoneyList && res.otherMoneyItem){
             var itemArr = res.otherMoneyList.split(","); //支出项目id列表
             var itemMoneyArr = null;
@@ -1724,7 +1725,7 @@
 	    $('#depotHeadDlgShow').show().dialog('open').dialog('setTitle','<img src="/js/easyui-1.3.5/themes/icons/list.png"/>&nbsp;查看' + showTitle);
 	    $(".window-mask").css({ width: webW ,height: webH});
 
-        depotHeadID = res.id;
+        depotHeadId = res.id;
 	    initTableData_material_show(totalPrice); //商品列表-查看状态
 
 		//零售单据展示数据
@@ -1815,7 +1816,7 @@
 					dataType: "json",
 					async :  false,
 					data: ({
-						DepotHeadID : oldId,
+						depotHeadId : oldId,
 						number : thisNumber
 					}),
 					success: function (tipInfo)
@@ -1944,7 +1945,7 @@
 
 				}
 				//进行明细的校验
-				if(depotHeadID ===0) {
+				if(depotHeadId ===0) {
 					//新增模式下
 					if (!CheckData("add")) {
 						return;
@@ -1958,7 +1959,7 @@
 				}
 				var orgId = null, projectId = null,allocationProjectId = null;
 				var changeAmount = $.trim($("#changeAmount").val())-0;
-				var totalPrice = $("#depotHeadFM .datagrid-footer [field='AllPrice'] div").text();
+				var totalPrice = $("#depotHeadFM .datagrid-footer [field='allPrice'] div").text();
 				if($('#orgId').length){
 					orgId = $('#orgId').combobox('getValue');
 				}
@@ -2071,7 +2072,7 @@
 		//优惠率输入框事件
 		$("#discount").off("keyup").on("keyup",function(){
 			var footer =$("#depotHeadFM .datagrid-footer");
-			var totalPrice = footer.find("[field='TaxLastMoney']").find("div").text();
+			var totalPrice = footer.find("[field='taxLastMoney']").find("div").text();
 			var discountNum = $(this).val();
 			var discountMoney  = (discountNum/100*totalPrice).toFixed(2);
 			var discountLastMoney  = (totalPrice - discountMoney).toFixed(2);
@@ -2087,7 +2088,7 @@
 		//优惠金额输入框事件
 		$("#discountMoney").off("keyup").on("keyup",function(){
 			var footer =$("#depotHeadFM .datagrid-footer");
-			var totalPrice = footer.find("[field='TaxLastMoney']").find("div").text();
+			var totalPrice = footer.find("[field='taxLastMoney']").find("div").text();
 			var discountMoney = $(this).val();
 			var discount  = (discountMoney/totalPrice).toFixed(2)*100;
 			var discountLastMoney  = (totalPrice - discountMoney).toFixed(2);
@@ -2454,99 +2455,99 @@
 	    	var footer =$("#depotHeadFM .datagrid-footer");
 	    	var input = ".datagrid-editable-input";
 	    	//点击商品下拉框，自动加载数量、单价、金额
-			body.find("[field='Stock']").find(input).prop("readonly","readonly");
-            body.find("[field='Unit']").find(input).prop("readonly","readonly");
+			body.find("[field='stock']").find(input).prop("readonly","readonly");
+            body.find("[field='unit']").find(input).prop("readonly","readonly");
 			//修改数量，自动计算金额和合计，另外计算含税单价、税额、价税合计
-			body.find("[field='OperNumber']").find(input).off("keyup").on("keyup",function(){
-				var UnitPrice = body.find("[field='UnitPrice']").find(input).val(); //单价
-				var taxRate = body.find("[field='TaxRate']").find(input).val(); //税率
-				var OperNumber =$(this).val()-0; //数量
-				body.find("[field='AllPrice']").find(input).val((UnitPrice*OperNumber).toFixed(2)); //金额
-				body.find("[field='TaxUnitPrice']").find(input).val((UnitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
-				body.find("[field='TaxMoney']").find(input).val((UnitPrice*OperNumber*(taxRate/100)).toFixed(2)); //税额
-				body.find("[field='TaxLastMoney']").find(input).val((UnitPrice*OperNumber*(1+taxRate/100)).toFixed(2)); //价税合计
-				statisticsFun(body,UnitPrice,OperNumber,footer,taxRate);
+			body.find("[field='operNumber']").find(input).off("keyup").on("keyup",function(){
+				var unitPrice = body.find("[field='unitPrice']").find(input).val(); //单价
+				var taxRate = body.find("[field='taxRate']").find(input).val(); //税率
+				var operNumber =$(this).val()-0; //数量
+				body.find("[field='allPrice']").find(input).val((unitPrice*operNumber).toFixed(2)); //金额
+				body.find("[field='taxUnitPrice']").find(input).val((unitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
+				body.find("[field='taxMoney']").find(input).val((unitPrice*operNumber*(taxRate/100)).toFixed(2)); //税额
+				body.find("[field='taxLastMoney']").find(input).val((unitPrice*operNumber*(1+taxRate/100)).toFixed(2)); //价税合计
+				statisticsFun(body,unitPrice,operNumber,footer,taxRate);
 			});
 	    	//修改单价，自动计算金额和合计
-	    	body.find("[field='UnitPrice']").find(input).off("keyup").on("keyup",function(){
-	    		var UnitPrice =$(this).val()-0; //单价
-				var taxRate = body.find("[field='TaxRate']").find(input).val(); //税率
-	    		var OperNumber = body.find("[field='OperNumber']").find(input).val(); //数量
-				body.find("[field='AllPrice']").find(input).val((UnitPrice*OperNumber).toFixed(2)); //金额
-				body.find("[field='TaxUnitPrice']").find(input).val((UnitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
-				body.find("[field='TaxMoney']").find(input).val((UnitPrice*OperNumber*(taxRate/100)).toFixed(2)); //税额
-				body.find("[field='TaxLastMoney']").find(input).val((UnitPrice*OperNumber*(1+taxRate/100)).toFixed(2)); //价税合计
-				statisticsFun(body,UnitPrice,OperNumber,footer,taxRate);
+	    	body.find("[field='unitPrice']").find(input).off("keyup").on("keyup",function(){
+	    		var unitPrice =$(this).val()-0; //单价
+				var taxRate = body.find("[field='taxRate']").find(input).val(); //税率
+	    		var operNumber = body.find("[field='operNumber']").find(input).val(); //数量
+				body.find("[field='allPrice']").find(input).val((unitPrice*operNumber).toFixed(2)); //金额
+				body.find("[field='taxUnitPrice']").find(input).val((unitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
+				body.find("[field='taxMoney']").find(input).val((unitPrice*operNumber*(taxRate/100)).toFixed(2)); //税额
+				body.find("[field='taxLastMoney']").find(input).val((unitPrice*operNumber*(1+taxRate/100)).toFixed(2)); //价税合计
+				statisticsFun(body,unitPrice,operNumber,footer,taxRate);
 	    	});
 			//修改含税单价，自动计算单价、金额、税额、价税合计和合计
-			body.find("[field='TaxUnitPrice']").find(input).off("keyup").on("keyup",function(){
-				var TaxUnitPrice =$(this).val()-0; //含税单价
-				var taxRate = body.find("[field='TaxRate']").find(input).val(); //税率
-				var UnitPrice = TaxUnitPrice/(1+taxRate/100); //计算单价
-				body.find("[field='UnitPrice']").find(input).val((UnitPrice).toFixed(2)); //单价
-				var OperNumber = body.find("[field='OperNumber']").find(input).val(); //数量
-				body.find("[field='AllPrice']").find(input).val((UnitPrice*OperNumber).toFixed(2)); //金额
-				body.find("[field='TaxMoney']").find(input).val((UnitPrice*OperNumber*(taxRate/100)).toFixed(2)); //税额
-				body.find("[field='TaxLastMoney']").find(input).val((UnitPrice*OperNumber*(1+taxRate/100)).toFixed(2)); //价税合计
-				statisticsFun(body,UnitPrice,OperNumber,footer,taxRate);
+			body.find("[field='taxUnitPrice']").find(input).off("keyup").on("keyup",function(){
+				var taxUnitPrice =$(this).val()-0; //含税单价
+				var taxRate = body.find("[field='taxRate']").find(input).val(); //税率
+				var unitPrice = taxUnitPrice/(1+taxRate/100); //计算单价
+				body.find("[field='unitPrice']").find(input).val((unitPrice).toFixed(2)); //单价
+				var operNumber = body.find("[field='operNumber']").find(input).val(); //数量
+				body.find("[field='allPrice']").find(input).val((unitPrice*operNumber).toFixed(2)); //金额
+				body.find("[field='taxMoney']").find(input).val((unitPrice*operNumber*(taxRate/100)).toFixed(2)); //税额
+				body.find("[field='taxLastMoney']").find(input).val((unitPrice*operNumber*(1+taxRate/100)).toFixed(2)); //价税合计
+				statisticsFun(body,unitPrice,operNumber,footer,taxRate);
 			});
 	    	//修改金额，自动计算单价、税额、价税合计和合计
-	    	body.find("[field='AllPrice']").find(input).off("keyup").on("keyup",function(){
-	    		var OperNumber = body.find("[field='OperNumber']").find(input).val(); //数量
-				var taxRate = body.find("[field='TaxRate']").find(input).val(); //税率
-	    		var AllPrice =$(this).val()-0; //金额
-				var UnitPrice = (AllPrice/OperNumber).toFixed(2);
-	    		body.find("[field='UnitPrice']").find(input).val(UnitPrice); //单价
-				body.find("[field='TaxUnitPrice']").find(input).val((UnitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
-				body.find("[field='TaxMoney']").find(input).val((UnitPrice*OperNumber*(taxRate/100)).toFixed(2)); //税额
-				body.find("[field='TaxLastMoney']").find(input).val((UnitPrice*OperNumber*(1+taxRate/100)).toFixed(2)); //价税合计
-				statisticsFun(body,UnitPrice,OperNumber,footer,taxRate);
+	    	body.find("[field='allPrice']").find(input).off("keyup").on("keyup",function(){
+	    		var operNumber = body.find("[field='operNumber']").find(input).val(); //数量
+				var taxRate = body.find("[field='taxRate']").find(input).val(); //税率
+	    		var allPrice =$(this).val()-0; //金额
+				var unitPrice = (allPrice/operNumber).toFixed(2);
+	    		body.find("[field='unitPrice']").find(input).val(unitPrice); //单价
+				body.find("[field='taxUnitPrice']").find(input).val((unitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
+				body.find("[field='taxMoney']").find(input).val((unitPrice*operNumber*(taxRate/100)).toFixed(2)); //税额
+				body.find("[field='taxLastMoney']").find(input).val((unitPrice*operNumber*(1+taxRate/100)).toFixed(2)); //价税合计
+				statisticsFun(body,unitPrice,operNumber,footer,taxRate);
 	    	});
 			//修改税率，自动计算含税单价、税额、价税合计和合计
-			body.find("[field='TaxRate']").find(input).off("keyup").on("keyup",function(){
+			body.find("[field='taxRate']").find(input).off("keyup").on("keyup",function(){
 				var taxRate =$(this).val()-0; //税率
-				var OperNumber = body.find("[field='OperNumber']").find(input).val(); //数量
-				var UnitPrice = body.find("[field='UnitPrice']").find(input).val(); //单价
-				body.find("[field='TaxUnitPrice']").find(input).val((UnitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
-				body.find("[field='TaxMoney']").find(input).val((UnitPrice*OperNumber*(taxRate/100)).toFixed(2)); //税额
-				body.find("[field='TaxLastMoney']").find(input).val((UnitPrice*OperNumber*(1+taxRate/100)).toFixed(2)); //价税合计
-				statisticsFun(body,UnitPrice,OperNumber,footer,taxRate);
+				var operNumber = body.find("[field='operNumber']").find(input).val(); //数量
+				var unitPrice = body.find("[field='unitPrice']").find(input).val(); //单价
+				body.find("[field='taxUnitPrice']").find(input).val((unitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
+				body.find("[field='taxMoney']").find(input).val((unitPrice*operNumber*(taxRate/100)).toFixed(2)); //税额
+				body.find("[field='taxLastMoney']").find(input).val((unitPrice*operNumber*(1+taxRate/100)).toFixed(2)); //价税合计
+				statisticsFun(body,unitPrice,operNumber,footer,taxRate);
 			});
 			//修改税额，自动计算税率、含税单价、价税合计和合计
-			body.find("[field='TaxMoney']").find(input).off("keyup").on("keyup",function(){
+			body.find("[field='taxMoney']").find(input).off("keyup").on("keyup",function(){
 				var taxMoney =$(this).val()-0; //税额
-				var AllPrice = body.find("[field='AllPrice']").find(input).val(); //金额
-				var taxRate = taxMoney/AllPrice*100; //税率
-				var OperNumber = body.find("[field='OperNumber']").find(input).val(); //数量
-				var UnitPrice = body.find("[field='UnitPrice']").find(input).val(); //单价
-				body.find("[field='TaxUnitPrice']").find(input).val((UnitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
-				body.find("[field='TaxRate']").find(input).val((taxRate).toFixed(2)); //税率
-				body.find("[field='TaxLastMoney']").find(input).val((UnitPrice*OperNumber*(1+taxRate/100)).toFixed(2)); //价税合计
-				statisticsFun(body,UnitPrice,OperNumber,footer,taxRate);
+				var allPrice = body.find("[field='allPrice']").find(input).val(); //金额
+				var taxRate = taxMoney/allPrice*100; //税率
+				var operNumber = body.find("[field='operNumber']").find(input).val(); //数量
+				var unitPrice = body.find("[field='unitPrice']").find(input).val(); //单价
+				body.find("[field='taxUnitPrice']").find(input).val((unitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
+				body.find("[field='taxRate']").find(input).val((taxRate).toFixed(2)); //税率
+				body.find("[field='taxLastMoney']").find(input).val((unitPrice*operNumber*(1+taxRate/100)).toFixed(2)); //价税合计
+				statisticsFun(body,unitPrice,operNumber,footer,taxRate);
 			});
 			//修改价税合计，自动计算税率、含税单价、税额和合计
-			body.find("[field='TaxLastMoney']").find(input).off("keyup").on("keyup",function(){
+			body.find("[field='taxLastMoney']").find(input).off("keyup").on("keyup",function(){
 				var taxLastMoney =$(this).val()-0; //价税合计
-				var AllPrice = body.find("[field='AllPrice']").find(input).val(); //金额
-				var taxRate = (taxLastMoney-AllPrice)/AllPrice*100; //税率
-				var OperNumber = body.find("[field='OperNumber']").find(input).val(); //数量
-				var UnitPrice = body.find("[field='UnitPrice']").find(input).val(); //单价
-				body.find("[field='TaxUnitPrice']").find(input).val((UnitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
-				body.find("[field='TaxRate']").find(input).val((taxRate).toFixed(2)); //税率
-				body.find("[field='TaxMoney']").find(input).val((UnitPrice*OperNumber*(taxRate/100)).toFixed(2)); //税额
-				statisticsFun(body,UnitPrice,OperNumber,footer,taxRate);
+				var allPrice = body.find("[field='allPrice']").find(input).val(); //金额
+				var taxRate = (taxLastMoney-allPrice)/allPrice*100; //税率
+				var operNumber = body.find("[field='operNumber']").find(input).val(); //数量
+				var unitPrice = body.find("[field='unitPrice']").find(input).val(); //单价
+				body.find("[field='taxUnitPrice']").find(input).val((unitPrice*(1+taxRate/100)).toFixed(2)); //含税单价
+				body.find("[field='taxRate']").find(input).val((taxRate).toFixed(2)); //税率
+				body.find("[field='taxMoney']").find(input).val((unitPrice*operNumber*(taxRate/100)).toFixed(2)); //税额
+				statisticsFun(body,unitPrice,operNumber,footer,taxRate);
 			});
 
 			//加载税率
 			if(thisTaxRate) {
-				body.find("[field='TaxRate']").find(input).val(thisTaxRate);
+				body.find("[field='taxRate']").find(input).val(thisTaxRate);
 			}
 			else {
-				body.find("[field='TaxRate']").find(input).val(0); //默认为0
+				body.find("[field='taxRate']").find(input).val(0); //默认为0
 			}
 
 			//在商品类型加载 组装件、普通子件
-			var mType = body.find("[field='MType']");
+			var mType = body.find("[field='mType']");
 			var rowListLength = mType.find(input).closest(".datagrid-row").attr("datagrid-row-index");
 			var mTypeValue = "组合件";
 			if(rowListLength > 0){
@@ -2562,13 +2563,13 @@
 	    if (editIndex === undefined) { return true }
 	    if ($('#materialData').datagrid('validateRow', editIndex)) {
 			//仓库信息
-			var edDepot = $('#materialData').datagrid('getEditor', {index:editIndex,field:'DepotId'});
-			var DepotName = $(edDepot.target).combobox('getText');
-			$('#materialData').datagrid('getRows')[editIndex]['DepotName'] = DepotName;
+			var edDepot = $('#materialData').datagrid('getEditor', {index:editIndex,field:'depotId'});
+			var depotName = $(edDepot.target).combobox('getText');
+			$('#materialData').datagrid('getRows')[editIndex]['depotName'] = depotName;
 			//商品信息
-	    	var edMaterial = $('#materialData').datagrid('getEditor', {index:editIndex,field:'MaterialId'});
-	        var MaterialName = $(edMaterial.target).combobox('getText');
-	        $('#materialData').datagrid('getRows')[editIndex]['MaterialName'] = MaterialName;
+	    	var edMaterial = $('#materialData').datagrid('getEditor', {index:editIndex,field:'materialId'});
+	        var materialName = $(edMaterial.target).combobox('getText');
+	        $('#materialData').datagrid('getRows')[editIndex]['materialName'] = materialName;
 	        $('#materialData').datagrid('endEdit', editIndex);
 	        editIndex = undefined;
 	        return true;
@@ -2591,7 +2592,7 @@
 	//新增明细
 	function append(){
 	    if (endEditing()) {
-	        $('#materialData').datagrid('appendRow', {DepotId:defDepotId});
+	        $('#materialData').datagrid('appendRow', {depotId:defDepotId});
 	        editIndex = $('#materialData').datagrid('getRows').length - 1;
 	        $('#materialData').datagrid('selectRow', editIndex).datagrid('beginEdit', editIndex);
 	        autoReckon();
@@ -2663,7 +2664,7 @@
 		}
 	    var totalRowNum = "";
 	    for (var i = 0; i < row.length; i++) {
-	        if (row[i].DepotId === "" || row[i].MaterialId === "" || row[i].OperNumber === "" || row[i].UnitPrice === "" || row[i].AllPrice === "") {
+	        if (row[i].depotId === "" || row[i].materialId === "" || row[i].operNumber === "" || row[i].unitPrice === "" || row[i].allPrice === "") {
 	            totalRowNum += (i + 1) + "、";
 	        }
 	    }

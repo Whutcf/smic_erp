@@ -725,11 +725,11 @@
     	var accountHeadInfo = accountHeadTotalInfo.split("AaBb");
         $("#BillNoShow").text(accountHeadInfo[1]);
         $("#BillTimeShow").text(accountHeadInfo[2]);	     
-        $("#RemarkShow").text(accountHeadInfo[3]);       
-        $("#AccountIdShow").text(accountHeadInfo[5]);
-        $('#OrgIdShow').text(accountHeadInfo[7]);
-        $("#HandsPersonIdShow").text(accountHeadInfo[9]);
-        $("#ChangeAmountShow").text(accountHeadInfo[10].replace("undefined","0"));
+        $("#remarkShow").text(accountHeadInfo[3]);       
+        $("#accountIdShow").text(accountHeadInfo[5]);
+        $('#orgIdShow').text(accountHeadInfo[7]);
+        $("#handsPersonIdShow").text(accountHeadInfo[9]);
+        $("#changeAmountShow").text(accountHeadInfo[10].replace("undefined","0"));
         var TotalPrice = accountHeadInfo[11];
         var showTitle = listTitle.replace("列表","信息");
         $('#accountHeadDlgShow').dialog('open').dialog('setTitle','<img src="/js/easyui-1.3.5/themes/icons/list.png"/>&nbsp;查看' + showTitle);
